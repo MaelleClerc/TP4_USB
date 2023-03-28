@@ -143,10 +143,15 @@ void APP_GEN_Tasks ( void )
         /* Application's initial state. */
         case APP_GEN_STATE_INIT:
         {
+            //reliser l'affichage démarage
             lcd_init();
             lcd_bl_on();
-            printf_lcd("Hello");
-            
+            lcd_gotoxy(1,1);
+            printf_lcd("TP4 UsbGen 2023");
+            lcd_gotoxy(1,2);
+            printf_lcd("Caroline Mieville");
+            lcd_gotoxy(1,3);
+            printf_lcd("Maelle Clerc");
             app_genData.state = APP_GEN_STATE_WAIT;
             
             break;
@@ -162,6 +167,14 @@ void APP_GEN_Tasks ( void )
                 printf_lcd("%c", app_genData.newChar);
             }
         
+            break;
+        }
+        case APP_GEN_STATE_WAIT:
+        {
+            
+            
+            app_genData.state = APP_GEN_STATE_WAIT;
+            
             break;
         }
 
