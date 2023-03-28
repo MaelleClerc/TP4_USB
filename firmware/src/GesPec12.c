@@ -192,7 +192,7 @@ void ScanPec12 (bool ValA, bool ValB, bool ValPB)
            //====================//
           //  Gestion BoutonS9  //
          //====================//
-    
+    /*
     if(S_OK == 0)
     {
         S9.OK = 1;
@@ -201,7 +201,7 @@ void ScanPec12 (bool ValA, bool ValB, bool ValPB)
     {
         //Affacer la valleur de S9
         S9.OK = 0;
-    }
+    }*/
     
             //====================//
             // Gestion inactivite //
@@ -267,9 +267,9 @@ bool Pec12NoActivity    (void) {
    return (Pec12.NoActivity);
 }
 
-bool S9_OK (void){
+/*bool S9_OK (void){
     return(S9.OK);
-}
+}*/
 
 
 //  Fonctions pour quittance des indications
@@ -297,8 +297,8 @@ void Pec12ClearInactivity   (void) {
   Pec12.NoActivity = 0;
   Pec12.InactivityDuration = 0;
 }
-//       S9ClearOK     annule indication OK de S9
+/*//       S9ClearOK     annule indication OK de S9
 void S9ClearOK (void){
     S9.OK = 0;
-}
+}*/
 

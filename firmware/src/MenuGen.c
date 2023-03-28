@@ -31,9 +31,7 @@ S_S9_Descriptor S9;
 //déclaration constate tableau
 const char tb_MenuFormes [4] [21] = { "Sinus", "Triangle", "DentDeScie", "Carre" };
 
-//initailisation de la varible pour mettre à jour ou non l'affichage
-uint8_t MAJ_LCD_SAVE = 0;
-uint8_t MAJ_LCD_Menu = 0;
+uint16_t static MAJ_LCD_Menu;
 
 // Initialisation du menu et des parametres
 void MENU_Initialize(S_ParamGen *pParam)
@@ -45,8 +43,6 @@ void MENU_Initialize(S_ParamGen *pParam)
     Val.Amplitude = pParam->Amplitude;
     Val.Frequence = pParam->Frequence;
    
-    //effacer le contenu sur l'affichage
-    Clear_LCD(); 
     
     //menu principale
     Menu_interface(pParam);
@@ -58,9 +54,8 @@ void MENU_Initialize(S_ParamGen *pParam)
 //gere l'affichage LCD pour le menu principal
 void Menu_interface(S_ParamGen *pParam)
 {
-    //Supprimer l'affichage sur le LCD
+    //clear LCD
     Clear_LCD();
-     
     //GERER L'AFFICHAGE DU MENU 
     //Ligne 1
     lcd_bl_on();    
@@ -93,102 +88,89 @@ void Menu_interface(S_ParamGen *pParam)
 
 
 // Execution du menu, appel cyclique depuis l'application
-void MENU_Execute(S_ParamGen *pParam)
+void MENU_Execute(S_ParamGen *pParam, bool Local)
 { 
     //initalisation des variable
-    //timer s9
-    uint8_t static Timer_S9 = 0;   
-    //Timer affichagetemps affichage
-    uint8_t static Timer_LCD = 0;
     
-       
-    
-    //ENREGSTRER DANS LA FLASH//
-    if (S9.OK == 0)
+
+   
+    if (Local == 0)
     {
-         if (Timer_S9 == 0)
+        if (Val_save == 1)
         {
-            //mettre à jour l'affichage si le menu de sauvegarde a été activé
-            if (MAJ_LCD_Menu == 0)
-            {
-                
-                /*gestion de l'affichage avec le PEG12*/
-                Menu_GESTION_PEG12(pParam);    
-            }
-            else 
-            {
-                //menu principale
-                Menu_interface(pParam);
-                /*gestion de l'affichage avec le PEG12*/
-                Menu_GESTION_PEG12(pParam);  
-                //menu mis à jour
-                MAJ_LCD_Menu = 0;
-                            
-            }
+            Menu_DemandeSave();
         }
-        //si le maintiens du bouton S9 >= à  2 sec
-        else if (Timer_S9 >= TIMER_S9_SAVE)
-        {          
-            /*Afficher sauvgade OK*/
-            Sauvgarde_OK();
-            //enregistrer les datas dans la flash
-            NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes 
-            
-            //activer timer pour afficher durant env 2 sec l'affichage okey
-            Timer_LCD ++;
-            if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
-            {
-                //remettre à 0 les timer
-                Timer_S9 = 0;
-                Timer_LCD = 0;
-            }
-        }
-        
-        else if ((Timer_S9 <= TIMER_S9_SAVE)&&(Timer_S9 > 0))
+        else 
         {
-            /*Afficher sauvgade Anuulee*/
-            Sauvgarde_ANNULE();
-            
-            //activer timer pour afficher durant env 2 sec l'affichage annulee
-            Timer_LCD ++;
-            if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
-            {
-                //remettre à 0 les timer
-                Timer_S9 = 0;
-                Timer_LCD = 0;
-            }           
-        }               
+            Menu_interface(pParam);
+            //ajouter les # aux début des 24 ligne
+            Pt_AffichageRemote();
+        }          
     }                      
     
     else
     {
-        //afficher le menu sauvgarde
-        Menu_Sauvgarde();         
-        //incrémenter le timer
-        Timer_S9 ++;
+        //mettre à jour l'affichage si le menu de sauvegarde a été activé
+        if (MAJ_LCD_Menu == 0)
+        {
+            /*gestion de l'affichage avec le PEG12*/
+            Menu_GESTION_PEG12(pParam);    
+        }
+        else 
+        {
+           
+            //menu principale
+            Menu_interface(pParam);
+            /*gestion de l'affichage avec le PEG12*/
+            Menu_GESTION_PEG12(pParam);  
+            //menu mis à jour
+            MAJ_LCD_Menu = 0;
+
+        }
     }
 }    
 
 
 /*Design menu de sauvgade*/
-void Menu_Sauvgarde()
+void Menu_DemandeSave()
 {
-    if(MAJ_LCD_SAVE == 0)
+    //executer 1 seul fois
+    if(MAJ_LCD_Menu == 0)
     {
+       // //gestion LCD// //
         //clear LCD
         Clear_LCD();
         //ecrire sur l'affichage
         lcd_gotoxy(6,2);    
-        printf_lcd("Sauvegarde?"); //ligne 2
-        lcd_gotoxy(5,3);    
-        printf_lcd("(appui long)"); //ligne 3
+        printf_lcd("Sauvegarde"); //ligne 2
+        lcd_gotoxy(9,3);    
+        printf_lcd("OK!"); //ligne 3 
+        
+        //enregistrer les paramètre reçu//
+        
     }
     //ne plus remettre à jour l'affichage save
-    MAJ_LCD_SAVE = 1;
+    MAJ_LCD_Menu = 1;
+    
 }
 
+void Pt_AffichageRemote()
+{
+    //ecrire sur la 1ere ligne de la 1ere colonne "#" au LCD
+    lcd_gotoxy(1,1);
+    printf_lcd("#");
+    //ecrire sur la 2ere ligne de la 1ere colonne "#" au LCD
+    lcd_gotoxy(1,2);
+    printf_lcd("#");
+    //ecrire sur la 3ere ligne de la 1ere colonne "#" au LCD
+    lcd_gotoxy(1,3);
+    printf_lcd("#");
+    //ecrire sur la 4ere ligne de la 1ere colonne "#" au LCD
+    lcd_gotoxy(1,4);
+    printf_lcd("#");
+}
 /*Design menu de sauvgade OK*/
-void Sauvgarde_OK()
+/*void Sauvgarde_OK()
 {
     if(MAJ_LCD_SAVE == 1)
     {
@@ -197,17 +179,16 @@ void Sauvgarde_OK()
         //ecrire sur l'affichage
         lcd_gotoxy(6,2);    
         printf_lcd("Sauvegarde"); //ligne 2
-        lcd_gotoxy(9,3);    
-        printf_lcd("OK!"); //ligne 3 
+        
     }
     //ne plus remettre à jour l'affichage save OK
     MAJ_LCD_SAVE = 0;
     //mettre à jour le LCD
     MAJ_LCD_Menu = 1;    
-}
+}/*
 
 /*Design menu de sauvgade ANNULER*/
-void Sauvgarde_ANNULE()
+/*void Sauvgarde_ANNULE()
 {
     if(MAJ_LCD_SAVE == 1)
     {
@@ -223,7 +204,7 @@ void Sauvgarde_ANNULE()
     MAJ_LCD_SAVE = 0;
     //mettre à jour le LCD
     MAJ_LCD_Menu = 1; 
-}
+}*/
 
 
 /*Supprimer toutes les ligne du LCD*/

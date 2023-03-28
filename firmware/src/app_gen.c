@@ -52,10 +52,13 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Included Files 
 // *****************************************************************************
 // *****************************************************************************
-
+#include <stdint.h>
+#include <stdbool.h>
 #include "app_gen.h"
 #include "Mc32DriverLcd.h"
 #include "DefMenuGen.h"
+#include "MenuGen.h"
+#include "bsp.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -79,7 +82,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 APP_GEN_DATA app_genData;
 S_ParamGen LocalParamGen;
-
+S_ParamGen RemoteParamGen;
+//flag permettant d'initialiser l'ecran
+uint8_t flag_tour = 1 ;
+bool Local;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -152,13 +158,43 @@ void APP_GEN_Tasks ( void )
             printf_lcd("Caroline Mieville");
             lcd_gotoxy(1,3);
             printf_lcd("Maelle Clerc");
-            app_genData.state = APP_GEN_STATE_WAIT;
+            
+            //Synchroniser les paramètres
+            RemoteParamGen = LocalParamGen;
+            
+            APP_GEN_UpdateState(APP_GEN_STATE_WAIT);
             
             break;
         }
 
         case APP_GEN_STATE_SERVICE_TASKS:
         {
+            //toggle la led2
+            LED2_W = !LED2_R;
+         //Afficher le nouvel affichage lors du premier tours
+            if (flag_tour == 1)
+            {
+                // Initialisation du menu
+                MENU_Initialize(&LocalParamGen);
+                //remettre le flag à 0 car s'initailise une seul fois
+                flag_tour = 0;
+            }
+            //execution menu
+            if (USB_DETECT)
+            {
+                Local = 0;
+                MENU_Execute(&RemoteParamGen, Local);
+            }
+            else
+            {   
+                Local = 1;
+                MENU_Execute(&LocalParamGen, Local);
+            }
+            
+            //le prochaine état est: attente
+            APP_GEN_UpdateState(APP_GEN_STATE_WAIT);
+            //toogle la LED2
+            LED2_W = !LED2_R;;
             if (app_genData.newCharReceived == true)
             {
                 app_genData.newCharReceived = false;
@@ -171,10 +207,7 @@ void APP_GEN_Tasks ( void )
         }
         case APP_GEN_STATE_WAIT:
         {
-            
-            
-            app_genData.state = APP_GEN_STATE_WAIT;
-            
+          
             break;
         }
 

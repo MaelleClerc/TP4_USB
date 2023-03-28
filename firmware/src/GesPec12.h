@@ -97,7 +97,7 @@ bool Pec12IsESC    (void);
 //       Pec12NoActivity   true indique abscence d'activité sur PEC12
 bool Pec12NoActivity    (void);
 //       S9_OK             true indique une pression sur le switch S9
-bool S9_OK    (void);
+//bool S9_OK    (void);
 
 
 
@@ -113,7 +113,7 @@ void Pec12ClearESC   (void);
 //       Pec12ClearInactivity     annule indication action Inactivity
 void Pec12ClearInactivity   (void);
 //       S9ClearOK    annule indication action ok
-void S9ClearOK (void);
+//void S9ClearOK (void);
 
 
 #endif
