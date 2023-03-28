@@ -284,14 +284,9 @@
         <logicalFolder name="driver" displayName="driver" projectFiles="true">
           <logicalFolder name="f2" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
-              <itemPath>../../../../../../framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
               <itemPath>../../../../../../framework/driver/tmr/src/drv_tmr_local.h</itemPath>
               <itemPath>../../../../../../../framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../../../framework/driver/tmr/drv_tmr.h</itemPath>
-            <itemPath>../../../../../../framework/driver/tmr/drv_tmr_mapping.h</itemPath>
-            <itemPath>../../../../../../framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
-            <itemPath>../../../../../../framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
             <itemPath>../../../../../../../framework/driver/tmr/drv_tmr.h</itemPath>
             <itemPath>../../../../../../../framework/driver/tmr/drv_tmr_mapping.h</itemPath>
             <itemPath>../../../../../../../framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
@@ -725,7 +720,6 @@
         <itemPath>../src/Mc32gestSPiDac.c</itemPath>
         <itemPath>../src/Mc32gest_SerComm.c</itemPath>
         <itemPath>../src/MenuGen.c</itemPath>
-        <itemPath>../src/main(ancien).c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="bsp" projectFiles="true">
         <logicalFolder name="f1" displayName="pic32mx_skes" projectFiles="true">
@@ -906,60 +900,6 @@
         <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
         <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
       </makeCustomizationType>
-      <item path="../../../../../../framework/driver/tmr/drv_tmr.h"
-            ex="true"
-            overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-CO>
-        </C32-CO>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
-      <item path="../../../../../../framework/driver/tmr/drv_tmr_compatibility.h"
-            ex="true"
-            overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-CO>
-        </C32-CO>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
-      <item path="../../../../../../framework/driver/tmr/drv_tmr_mapping.h"
-            ex="true"
-            overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-CO>
-        </C32-CO>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
       <item path="../../../../../../framework/driver/tmr/src/drv_tmr_local.h"
             ex="true"
             overriding="false">
@@ -978,43 +918,7 @@
         <C32Global>
         </C32Global>
       </item>
-      <item path="../../../../../../framework/driver/tmr/src/drv_tmr_variant_mapping.h"
-            ex="true"
-            overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-CO>
-        </C32-CO>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
       <item path="../../../../../../framework/driver/tmr/src/dynamic/drv_tmr.c"
-            ex="true"
-            overriding="false">
-        <C32>
-        </C32>
-        <C32-AR>
-        </C32-AR>
-        <C32-AS>
-        </C32-AS>
-        <C32-CO>
-        </C32-CO>
-        <C32-LD>
-        </C32-LD>
-        <C32CPP>
-        </C32CPP>
-        <C32Global>
-        </C32Global>
-      </item>
-      <item path="../../../../../../framework/driver/tmr/tmr_definitions_pic32m.h"
             ex="true"
             overriding="false">
         <C32>

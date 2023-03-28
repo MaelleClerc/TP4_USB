@@ -64,6 +64,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "app_gen.h"
 #include "system_definitions.h"
 
+#include "GesPec12.h"
+#include "Generateur.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: System Interrupt Vector Functions
@@ -71,14 +73,38 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
  
-
-void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance0(void)
+//timer 1 toutes les 1 ms
+void __ISR(_TIMER_1_VECTOR, ipl3AUTO) IntHandlerDrvTmrInstance0(void)
 {
+    //initialiser les variable
+    uint32_t static ATTENDRE = 0;
+    uint32_t static NCYCLE = 2999;
+    //toggle LED1
+    LED1_W = !LED1_R;
+   
+    //Obtenir la valeur de PEC
+    ScanPec12(PEC12_A, PEC12_B, PEC12_PB );
+    
+    // durant son premier tour (initialisation) il attend 3 sec avant d'aller sur service task si non toutes les 10ms
+    if(ATTENDRE == NCYCLE )
+    {       
+        APP_GEN_UpdateState(APP_STATE_SERVICE_TASKS);
+        //Changer la valeur de cycle pour toute les 10 ms, va dans service task.
+        NCYCLE = 9;
+        ATTENDRE = 0;       
+    }
+    else
+    {
+       ATTENDRE ++; 
+    }
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_1);
 }
-void __ISR(_TIMER_1_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance1(void)
+//timer 3 toutes les 250 us
+void __ISR(_TIMER_3_VECTOR, ipl7AUTO) IntHandlerDrvTmrInstance1(void)
 {
-    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_1);
+    //executer l'echantillonage du signal
+    GENSIG_Execute();
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
  void __ISR(_USB_1_VECTOR, ipl4AUTO) _IntHandlerUSBInstance0(void)
 {

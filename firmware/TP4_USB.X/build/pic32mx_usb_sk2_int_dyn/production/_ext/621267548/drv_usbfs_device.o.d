@@ -1,5 +1,5 @@
-build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_gen.o: \
- ../src/app_gen.c ../src/app_gen.h \
+build/pic32mx_usb_sk2_int_dyn/production/_ext/621267548/drv_usbfs_device.o: \
+ ../../../../../../../framework/driver/usb/usbfs/src/dynamic/drv_usbfs_device.c \
  ../src/system_config/pic32mx_usb_sk2_int_dyn/system_config.h \
  ../../../../../../../bsp/pic32mx_skes/bsp.h \
  ../../../../../../../framework/peripheral/ports/plib_ports.h \
@@ -53,68 +53,13 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_gen.o: \
  ../../../../../../../framework/peripheral/tmr/processor/../templates/tmr_CounterAsyncWriteControl_Default.h \
  ../../../../../../../framework/peripheral/tmr/processor/../templates/tmr_CounterAsyncWriteInProgress_Default.h \
  ../../../../../../../framework/peripheral/tmr/processor/../templates/tmr_TimerOperationMode_Default.h \
- ../src/system_config/pic32mx_usb_sk2_int_dyn/system_definitions.h \
+ ../../../../../../../framework/driver/usb/usbfs/drv_usbfs.h \
+ ../../../../../../../framework/usb/usb_common.h \
+ ../../../../../../../framework/usb/usb_chapter_9.h \
+ ../../../../../../../framework/driver/driver_common.h \
+ ../../../../../../../framework/system/int/sys_int.h \
  ../../../../../../../framework/system/common/sys_common.h \
  ../../../../../../../framework/system/common/sys_module.h \
- ../../../../../../../framework/system/devcon/sys_devcon.h \
- ../../../../../../../framework/system/system.h \
- ../../../../../../../framework/system/clk/sys_clk.h \
- ../../../../../../../framework/peripheral/osc/plib_osc.h \
- ../../../../../../../framework/peripheral/osc/processor/osc_processor.h \
- ../../../../../../../framework/peripheral/osc/processor/osc_p32xxxx.h \
- ../../../../../../../framework/peripheral/osc/processor/osc_p32mx795f512l.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_OnWaitAction_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SecondaryEnable_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SecondaryReady_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_FRCDivisor_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscSelect_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscSwitchInit_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscCurrentGet_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockDivisor_PIC32_1.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockReady_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UsbClockSource_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLLockStatus_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLClockLock_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLMultiplier_PIC32_1.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLMultiplier_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLMultiplier_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLOutputDivisor_PIC32_1.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLOutputDivisor_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLOutputDivisor_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockFail_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_FRCTuning_Default.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscBaseClock_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscChange_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscChangeActive_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscStopInSleep_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOutputEnable_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscStopInIdleEnable_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscEnable_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscDivisor_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscTrim_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockOutputEnable_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLInputDivisor_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLInputDivisor_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLInputDivisor_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLInputClockSource_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLInputClockSource_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLFrequencyRange_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLFrequencyRange_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLFrequencyRange_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SleepToStartupClock_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockReadyStatus_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockDiagStatus_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockSlewingStatus_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SlewEnableControl_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SlewDivisorStepControl_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SystemClockDivisorControl_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_DreamModeControl_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ForceLock_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ResetPLL_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLBypass_Unsupported.h \
- ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLClockOut_Unsupported.h \
- ../../../../../../../framework/system/clk/sys_clk_compatibility.h \
- ../../../../../../../framework/system/int/sys_int.h \
  ../../../../../../../framework/peripheral/int/plib_int.h \
  ../../../../../../../framework/peripheral/int/processor/int_processor.h \
  ../../../../../../../framework/peripheral/int/processor/int_p32xxxx.h \
@@ -136,16 +81,6 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_gen.o: \
  ../../../../../../../framework/peripheral/int/processor/../templates/int_VariableOffset_Unsupported.h \
  ../../../../../../../framework/peripheral/int/processor/../templates/int_SoftwareNMI_Unsupported.h \
  ../../../../../../../framework/system/int/sys_int_mapping.h \
- ../src/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/drv_tmr_static.h \
- ../../../../../../../framework/driver/tmr/drv_tmr.h \
- ../../../../../../../framework/driver/driver_common.h \
- ../../../../../../../framework/driver/tmr/tmr_definitions_pic32m.h \
- ../../../../../../../framework/driver/tmr/drv_tmr_compatibility.h \
- ../../../../../../../framework/system/ports/sys_ports.h \
- ../../../../../../../framework/system/ports/sys_ports_definitions.h \
- ../../../../../../../framework/driver/usb/usbfs/drv_usbfs.h \
- ../../../../../../../framework/usb/usb_common.h \
- ../../../../../../../framework/usb/usb_chapter_9.h \
  ../../../../../../../framework/driver/usb/drv_usb.h \
  ../../../../../../../framework/usb/usb_host_client_driver.h \
  ../../../../../../../framework/usb/usb_host.h \
@@ -211,15 +146,68 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_gen.o: \
  ../../../../../../../framework/peripheral/usb/processor/../templates/usb_BDTFunctions_PIC32.h \
  ../../../../../../../framework/usb/usb_hub.h \
  ../../../../../../../framework/driver/usb/usbfs/drv_usbfs_mapping.h \
- ../../../../../../../framework/usb/usb_device.h \
- ../../../../../../../framework/usb/src/usb_device_mapping.h \
- ../../../../../../../framework/usb/usb_device_cdc.h \
- ../../../../../../../framework/usb/src/usb_device_function_driver.h \
- ../../../../../../../framework/usb/usb_cdc.h ../src/app.h \
- ../src/app_gen.h ../../../../../../../bsp/pic32mx_skes/Mc32DriverLcd.h \
- ../src/DefMenuGen.h ../src/MenuGen.h
-
-../src/app_gen.h:
+ ../../../../../../../framework/driver/usb/usbfs/src/drv_usbfs_local.h \
+ ../../../../../../../framework/system/debug/sys_debug.h \
+ ../../../../../../../framework/system/system.h \
+ ../../../../../../../framework/driver/usb/usbfs/src/drv_usbfs_variant_mapping.h \
+ ../../../../../../../framework/osal/osal.h \
+ ../../../../../../../framework/osal/osal_definitions.h \
+ ../../../../../../../framework/osal/osal_impl_basic.h \
+ ../../../../../../../framework/system/devcon/sys_devcon.h \
+ ../../../../../../../framework/peripheral/osc/plib_osc.h \
+ ../../../../../../../framework/peripheral/osc/processor/osc_processor.h \
+ ../../../../../../../framework/peripheral/osc/processor/osc_p32xxxx.h \
+ ../../../../../../../framework/peripheral/osc/processor/osc_p32mx795f512l.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_OnWaitAction_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SecondaryEnable_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SecondaryReady_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_FRCDivisor_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscSelect_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscSwitchInit_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscCurrentGet_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockDivisor_PIC32_1.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockReady_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UsbClockSource_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLLockStatus_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLClockLock_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLMultiplier_PIC32_1.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLMultiplier_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLMultiplier_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLOutputDivisor_PIC32_1.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLOutputDivisor_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLOutputDivisor_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockFail_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_FRCTuning_Default.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscBaseClock_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscChange_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscChangeActive_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscStopInSleep_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOutputEnable_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscStopInIdleEnable_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscEnable_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscDivisor_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscTrim_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockOutputEnable_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLInputDivisor_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLInputDivisor_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLInputDivisor_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLInputClockSource_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLInputClockSource_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLFrequencyRange_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLFrequencyRange_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLFrequencyRange_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SleepToStartupClock_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockReadyStatus_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockDiagStatus_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockSlewingStatus_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SlewEnableControl_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SlewDivisorStepControl_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_SystemClockDivisorControl_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_DreamModeControl_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ForceLock_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_ResetPLL_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLBypass_Unsupported.h \
+ ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLClockOut_Unsupported.h
 
 ../src/system_config/pic32mx_usb_sk2_int_dyn/system_config.h:
 
@@ -327,129 +315,19 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_gen.o: \
 
 ../../../../../../../framework/peripheral/tmr/processor/../templates/tmr_TimerOperationMode_Default.h:
 
-../src/system_config/pic32mx_usb_sk2_int_dyn/system_definitions.h:
+../../../../../../../framework/driver/usb/usbfs/drv_usbfs.h:
+
+../../../../../../../framework/usb/usb_common.h:
+
+../../../../../../../framework/usb/usb_chapter_9.h:
+
+../../../../../../../framework/driver/driver_common.h:
+
+../../../../../../../framework/system/int/sys_int.h:
 
 ../../../../../../../framework/system/common/sys_common.h:
 
 ../../../../../../../framework/system/common/sys_module.h:
-
-../../../../../../../framework/system/devcon/sys_devcon.h:
-
-../../../../../../../framework/system/system.h:
-
-../../../../../../../framework/system/clk/sys_clk.h:
-
-../../../../../../../framework/peripheral/osc/plib_osc.h:
-
-../../../../../../../framework/peripheral/osc/processor/osc_processor.h:
-
-../../../../../../../framework/peripheral/osc/processor/osc_p32xxxx.h:
-
-../../../../../../../framework/peripheral/osc/processor/osc_p32mx795f512l.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_OnWaitAction_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_SecondaryEnable_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_SecondaryReady_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_FRCDivisor_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscSelect_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscSwitchInit_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscCurrentGet_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockDivisor_PIC32_1.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockReady_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_UsbClockSource_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLLockStatus_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLClockLock_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLMultiplier_PIC32_1.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLMultiplier_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLMultiplier_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLOutputDivisor_PIC32_1.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLOutputDivisor_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLOutputDivisor_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockFail_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_FRCTuning_Default.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscBaseClock_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscChange_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscChangeActive_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscStopInSleep_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOutputEnable_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscStopInIdleEnable_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscEnable_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscDivisor_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscTrim_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockOutputEnable_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLInputDivisor_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLInputDivisor_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLInputDivisor_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLInputClockSource_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLInputClockSource_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLFrequencyRange_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLFrequencyRange_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLFrequencyRange_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_SleepToStartupClock_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockReadyStatus_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockDiagStatus_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockSlewingStatus_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_SlewEnableControl_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_SlewDivisorStepControl_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_SystemClockDivisorControl_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_DreamModeControl_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ForceLock_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_ResetPLL_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLBypass_Unsupported.h:
-
-../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLClockOut_Unsupported.h:
-
-../../../../../../../framework/system/clk/sys_clk_compatibility.h:
-
-../../../../../../../framework/system/int/sys_int.h:
 
 ../../../../../../../framework/peripheral/int/plib_int.h:
 
@@ -492,26 +370,6 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_gen.o: \
 ../../../../../../../framework/peripheral/int/processor/../templates/int_SoftwareNMI_Unsupported.h:
 
 ../../../../../../../framework/system/int/sys_int_mapping.h:
-
-../src/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/drv_tmr_static.h:
-
-../../../../../../../framework/driver/tmr/drv_tmr.h:
-
-../../../../../../../framework/driver/driver_common.h:
-
-../../../../../../../framework/driver/tmr/tmr_definitions_pic32m.h:
-
-../../../../../../../framework/driver/tmr/drv_tmr_compatibility.h:
-
-../../../../../../../framework/system/ports/sys_ports.h:
-
-../../../../../../../framework/system/ports/sys_ports_definitions.h:
-
-../../../../../../../framework/driver/usb/usbfs/drv_usbfs.h:
-
-../../../../../../../framework/usb/usb_common.h:
-
-../../../../../../../framework/usb/usb_chapter_9.h:
 
 ../../../../../../../framework/driver/usb/drv_usb.h:
 
@@ -643,22 +501,126 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_gen.o: \
 
 ../../../../../../../framework/driver/usb/usbfs/drv_usbfs_mapping.h:
 
-../../../../../../../framework/usb/usb_device.h:
+../../../../../../../framework/driver/usb/usbfs/src/drv_usbfs_local.h:
 
-../../../../../../../framework/usb/src/usb_device_mapping.h:
+../../../../../../../framework/system/debug/sys_debug.h:
 
-../../../../../../../framework/usb/usb_device_cdc.h:
+../../../../../../../framework/system/system.h:
 
-../../../../../../../framework/usb/src/usb_device_function_driver.h:
+../../../../../../../framework/driver/usb/usbfs/src/drv_usbfs_variant_mapping.h:
 
-../../../../../../../framework/usb/usb_cdc.h:
+../../../../../../../framework/osal/osal.h:
 
-../src/app.h:
+../../../../../../../framework/osal/osal_definitions.h:
 
-../src/app_gen.h:
+../../../../../../../framework/osal/osal_impl_basic.h:
 
-../../../../../../../bsp/pic32mx_skes/Mc32DriverLcd.h:
+../../../../../../../framework/system/devcon/sys_devcon.h:
 
-../src/DefMenuGen.h:
+../../../../../../../framework/peripheral/osc/plib_osc.h:
 
-../src/MenuGen.h:
+../../../../../../../framework/peripheral/osc/processor/osc_processor.h:
+
+../../../../../../../framework/peripheral/osc/processor/osc_p32xxxx.h:
+
+../../../../../../../framework/peripheral/osc/processor/osc_p32mx795f512l.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_OnWaitAction_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_SecondaryEnable_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_SecondaryReady_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_FRCDivisor_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscSelect_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscSwitchInit_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_OscCurrentGet_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockDivisor_PIC32_1.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockReady_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_UsbClockSource_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLLockStatus_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLClockLock_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLMultiplier_PIC32_1.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLMultiplier_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLMultiplier_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLOutputDivisor_PIC32_1.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLOutputDivisor_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLOutputDivisor_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockFail_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_FRCTuning_Default.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscBaseClock_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscChange_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscChangeActive_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscStopInSleep_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOutputEnable_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscStopInIdleEnable_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscEnable_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscDivisor_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ReferenceOscTrim_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PBClockOutputEnable_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLInputDivisor_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLInputDivisor_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLInputDivisor_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLInputClockSource_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLInputClockSource_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLFrequencyRange_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLFrequencyRange_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_UPLLFrequencyRange_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_SleepToStartupClock_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockReadyStatus_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockDiagStatus_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ClockSlewingStatus_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_SlewEnableControl_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_SlewDivisorStepControl_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_SystemClockDivisorControl_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_DreamModeControl_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ForceLock_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_ResetPLL_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_PLLBypass_Unsupported.h:
+
+../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLClockOut_Unsupported.h:

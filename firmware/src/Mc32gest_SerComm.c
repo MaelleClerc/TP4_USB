@@ -21,6 +21,10 @@
 
 bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
 {
+    // Code pour récupérer les données de l'USB en utilisant SPI
+    // Ici, on suppose que les données sont stockées dans un tableau nommé "usbData"
+    // et que la fonction SPITransfer() est utilisée pour la communication SPI
+    SPITransfer(usbData);
   
 } // GetMessage
 
@@ -35,5 +39,12 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
 
 void SendMessage(int8_t *USBSendBuffer, S_ParamGen *pParam, bool Saved )
 {
-   
+   // Code pour envoyer les données à l'EEprom en utilisant SPI
+  // Ici, on suppose que les données sont stockées dans un tableau nommé "eepromData"
+  // et que la fonction SPITransfer() est utilisée pour la communication SPI
+  // On commence par sélectionner le circuit d'EEprom en abaissant sa broche de sélection
+  digitalWrite(EEPROM_CS_PIN, LOW);
+  SPITransfer(eepromData);
+  // Puis on désélectionne le circuit d'EEprom en remontant sa broche de sélection
+  digitalWrite(EEPROM_CS_PIN, HIGH);
 } // SendMessage

@@ -22,11 +22,11 @@
 // T.P. 2016 100 echantillons
 #define MAX_ECH 100
 #define VAL_TIC_MAX 32767
-//déclaration de....
+//déclaration des variable
 S_Amplitude Ampli;
 int32_t tb_Amplitude[MAX_ECH];
 
-// Initialisation du  générateur
+// Initialisation du  generateur
 void  GENSIG_Initialize(S_ParamGen *pParam)
 {           
     //Recuperation des datas sauvegard�es au demarrage precedent
