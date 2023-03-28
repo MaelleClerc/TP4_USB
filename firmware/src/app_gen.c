@@ -55,7 +55,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 
 #include "app_gen.h"
 #include "Mc32DriverLcd.h"
-
+#include "DefMenuGen.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -78,6 +78,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 APP_GEN_DATA app_genData;
+S_ParamGen LocalParamGen;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -116,7 +117,7 @@ APP_GEN_DATA app_genData;
 void APP_GEN_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-    app_genData.state = APP_GEN_STATE_INIT;
+     APP_GEN_UpdateState(APP_STATE_INIT);
 
     
     /* TODO: Initialize your application's state machine and other
@@ -146,7 +147,7 @@ void APP_GEN_Tasks ( void )
             lcd_bl_on();
             printf_lcd("Hello");
             
-            app_genData.state = APP_GEN_STATE_SERVICE_TASKS;
+            app_genData.state = APP_GEN_STATE_WAIT;
             
             break;
         }
@@ -175,13 +176,18 @@ void APP_GEN_Tasks ( void )
         }
     }
 }
-
-
 void APP_GEN_DisplayChar(char car)
 {
     app_genData.newCharReceived = true;
     app_genData.newChar = car;
 }
+
+void APP_GEN_UpdateState(APP_GEN_STATES newState)
+{
+    app_genData.state = newState;
+}
+
+
  
 
 /*******************************************************************************
