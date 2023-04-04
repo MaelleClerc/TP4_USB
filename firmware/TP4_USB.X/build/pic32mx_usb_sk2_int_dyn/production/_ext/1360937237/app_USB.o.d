@@ -1,5 +1,5 @@
 build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_USB.o: \
- ../src/app_USB.c ../src/app_gen.h \
+ ../src/app_USB.c ../src/app_USB.h \
  ../src/system_config/pic32mx_usb_sk2_int_dyn/system_config.h \
  ../../../../../../../bsp/pic32mx_skes/bsp.h \
  ../../../../../../../framework/peripheral/ports/plib_ports.h \
@@ -214,7 +214,7 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_USB.o: \
  ../../../../../../../framework/usb/usb_cdc.h ../src/app_usb.h \
  ../src/app_gen.h
 
-../src/app_gen.h:
+../src/app_USB.h:
 
 ../src/system_config/pic32mx_usb_sk2_int_dyn/system_config.h:
 

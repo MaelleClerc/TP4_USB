@@ -199,7 +199,7 @@ void APP_GEN_Initialize ( void );
  */
 
 void APP_GEN_Tasks( void );
-void APP_GEN_DisplayChar(char car);
+
 void APP_GEN_UpdateState(APP_GEN_STATES newState);
 
 #endif /* _APP_GEN_H */

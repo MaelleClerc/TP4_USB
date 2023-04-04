@@ -54,7 +54,7 @@ void  GENSIG_Initialize(S_ParamGen *pParam)
 }//End of GENSIG_Initialize
   
 
-// Mise à jour de la periode d'échantillonage
+// Mise a�jour de la periode d'echantillonage
 void  GENSIG_UpdatePeriode(S_ParamGen *pParam)
 {
     
