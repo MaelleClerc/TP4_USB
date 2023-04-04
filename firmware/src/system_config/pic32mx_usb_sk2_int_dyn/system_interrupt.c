@@ -60,7 +60,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "system/common/sys_common.h"
-#include "app.h"
+#include "app_usb.h"
 #include "app_gen.h"
 #include "system_definitions.h"
 
@@ -88,7 +88,8 @@ void __ISR(_TIMER_1_VECTOR, ipl3AUTO) IntHandlerDrvTmrInstance0(void)
     // durant son premier tour (initialisation) il attend 3 sec avant d'aller sur service task si non toutes les 10ms
     if(ATTENDRE == NCYCLE )
     {       
-        APP_GEN_UpdateState(APP_STATE_SERVICE_TASKS);
+        
+        APP_GEN_UpdateState(APP_GEN_STATE_SERVICE_TASKS);
         //Changer la valeur de cycle pour toute les 10 ms, va dans service task.
         NCYCLE = 9;
         ATTENDRE = 0;       

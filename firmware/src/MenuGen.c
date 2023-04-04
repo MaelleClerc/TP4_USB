@@ -91,12 +91,10 @@ void Menu_interface(S_ParamGen *pParam)
 void MENU_Execute(S_ParamGen *pParam, bool Local)
 { 
     //initalisation des variable
-    
-
-   
+       
     if (Local == 0)
     {
-        if (Val_save == 1)
+        if (Local == 1)
         {
             Menu_DemandeSave();
         }
@@ -185,7 +183,7 @@ void Pt_AffichageRemote()
     MAJ_LCD_SAVE = 0;
     //mettre à jour le LCD
     MAJ_LCD_Menu = 1;    
-}/*
+}*/
 
 /*Design menu de sauvgade ANNULER*/
 /*void Sauvgarde_ANNULE()

@@ -103,7 +103,7 @@ typedef enum
     /* Application Error state*/
     APP_STATE_ERROR
 
-} APP_STATES;
+} APP_State;
 
 
 // *****************************************************************************
@@ -125,7 +125,7 @@ typedef struct
     USB_DEVICE_HANDLE deviceHandle;
 
     /* Application's current state*/
-    APP_STATES state;
+    APP_State state;
 
     /* Set Line Coding Data */
     USB_CDC_LINE_CODING setLineCodingData;
