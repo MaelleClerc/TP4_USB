@@ -194,14 +194,8 @@ void APP_GEN_Tasks ( void )
             //le prochaine état est: attente
             APP_GEN_UpdateState(APP_GEN_STATE_WAIT);
             //toogle la LED2
-            LED2_W = !LED2_R;;
-            if (app_genData.newCharReceived == true)
-            {
-                app_genData.newCharReceived = false;
-                
-                lcd_gotoxy(1, 2);
-                printf_lcd("%c", app_genData.newChar);
-            }
+            LED2_W = !LED2_R;
+            
         
             break;
         }
@@ -221,11 +215,6 @@ void APP_GEN_Tasks ( void )
             break;
         }
     }
-}
-void APP_GEN_DisplayChar(char car)
-{
-    app_genData.newCharReceived = true;
-    app_genData.newChar = car;
 }
 
 void APP_GEN_UpdateState(APP_GEN_STATES newState)

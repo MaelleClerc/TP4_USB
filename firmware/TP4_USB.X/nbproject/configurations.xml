@@ -84,11 +84,6 @@
                          displayName="pic32mx_usb_sk2_int_dyn"
                          projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
-              <logicalFolder name="f2" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="tmr" projectFiles="true">
-                  <itemPath>../src/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/drv_tmr_static.h</itemPath>
-                </logicalFolder>
-              </logicalFolder>
               <logicalFolder name="f1" displayName="system" projectFiles="true">
                 <logicalFolder name="f1" displayName="clk" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
@@ -258,8 +253,6 @@
             <itemPath>../src/system_config/pic32mz_ef_sk_poll_dyn/system_definitions.h</itemPath>
           </logicalFolder>
         </logicalFolder>
-        <itemPath>../src/app.h</itemPath>
-        <itemPath>../src/app_gen.h</itemPath>
         <itemPath>../src/DefMenuGen.h</itemPath>
         <itemPath>../src/Generateur.h</itemPath>
         <itemPath>../src/GesPec12.h</itemPath>
@@ -269,6 +262,8 @@
         <itemPath>../src/Mc32gestSpiDac.h</itemPath>
         <itemPath>../src/Mc32gest_SerComm.h</itemPath>
         <itemPath>../src/MenuGen.h</itemPath>
+        <itemPath>../src/app_USB.h</itemPath>
+        <itemPath>../src/app_gen.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="bsp" projectFiles="true">
         <logicalFolder name="f1" displayName="pic32mx_skes" projectFiles="true">
@@ -285,12 +280,7 @@
           <logicalFolder name="f2" displayName="tmr" projectFiles="true">
             <logicalFolder name="f1" displayName="src" projectFiles="true">
               <itemPath>../../../../../../framework/driver/tmr/src/drv_tmr_local.h</itemPath>
-              <itemPath>../../../../../../../framework/driver/tmr/src/drv_tmr_variant_mapping.h</itemPath>
             </logicalFolder>
-            <itemPath>../../../../../../../framework/driver/tmr/drv_tmr.h</itemPath>
-            <itemPath>../../../../../../../framework/driver/tmr/drv_tmr_mapping.h</itemPath>
-            <itemPath>../../../../../../../framework/driver/tmr/drv_tmr_compatibility.h</itemPath>
-            <itemPath>../../../../../../../framework/driver/tmr/tmr_definitions_pic32m.h</itemPath>
           </logicalFolder>
           <logicalFolder name="f1" displayName="usb" projectFiles="true">
             <logicalFolder name="f2" displayName="usbfs" projectFiles="true">
@@ -482,15 +472,7 @@
                          displayName="pic32mx_usb_sk2_int_dyn"
                          projectFiles="true">
             <logicalFolder name="f1" displayName="framework" projectFiles="true">
-              <logicalFolder name="f1" displayName="driver" projectFiles="true">
-                <logicalFolder name="f1" displayName="tmr" projectFiles="true">
-                  <logicalFolder name="f1" displayName="src" projectFiles="true">
-                    <itemPath>../src/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/src/drv_tmr_static.c</itemPath>
-                    <itemPath>../src/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/src/drv_tmr_mapping.c</itemPath>
-                  </logicalFolder>
-                </logicalFolder>
-              </logicalFolder>
-              <logicalFolder name="f2" displayName="system" projectFiles="true">
+              <logicalFolder name="f1" displayName="system" projectFiles="true">
                 <logicalFolder name="f1" displayName="clk" projectFiles="true">
                   <logicalFolder name="f1" displayName="src" projectFiles="true">
                     <itemPath>../src/system_config/pic32mx_usb_sk2_int_dyn/framework/system/clk/src/sys_clk_pic32mx.c</itemPath>
@@ -709,9 +691,7 @@
             <itemPath>../src/system_config/pic32mz_ef_sk_poll_dyn/system_tasks.c</itemPath>
           </logicalFolder>
         </logicalFolder>
-        <itemPath>../src/app.c</itemPath>
         <itemPath>../src/main.c</itemPath>
-        <itemPath>../src/app_gen.c</itemPath>
         <itemPath>../src/Generateur.c</itemPath>
         <itemPath>../src/GesPec12.c</itemPath>
         <itemPath>../src/Mc32Debounce.c</itemPath>
@@ -720,6 +700,8 @@
         <itemPath>../src/Mc32gestSPiDac.c</itemPath>
         <itemPath>../src/Mc32gest_SerComm.c</itemPath>
         <itemPath>../src/MenuGen.c</itemPath>
+        <itemPath>../src/app_gen.c</itemPath>
+        <itemPath>../src/app_USB.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="bsp" projectFiles="true">
         <logicalFolder name="f1" displayName="pic32mx_skes" projectFiles="true">

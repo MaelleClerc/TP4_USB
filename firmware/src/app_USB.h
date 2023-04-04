@@ -59,6 +59,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include <string.h>
 
 // *****************************************************************************
 // *****************************************************************************
@@ -103,7 +104,7 @@ typedef enum
     /* Application Error state*/
     APP_STATE_ERROR
 
-} APP_STATES;
+} APP_State;
 
 
 // *****************************************************************************
@@ -125,8 +126,13 @@ typedef struct
     USB_DEVICE_HANDLE deviceHandle;
 
     /* Application's current state*/
-    APP_STATES state;
-
+    APP_State state;
+    
+    /*Recevoir un nouveau caratère*/
+    bool newCharReceived;
+    char newStringReceived[30];
+    char newChar;
+            
     /* Set Line Coding Data */
     USB_CDC_LINE_CODING setLineCodingData;
 
@@ -256,7 +262,7 @@ void APP_Initialize ( void );
  */
 
 void APP_Tasks ( void );
-
+void APP_DisplayChar(char car);
 
 #endif /* _APP_H */
 /*******************************************************************************

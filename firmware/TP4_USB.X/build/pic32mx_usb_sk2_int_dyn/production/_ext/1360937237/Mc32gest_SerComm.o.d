@@ -1,5 +1,5 @@
-build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app.o: \
- ../src/app.c ../src/app.h \
+build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/Mc32gest_SerComm.o: \
+ ../src/Mc32gest_SerComm.c ../src/app_USB.h \
  ../src/system_config/pic32mx_usb_sk2_int_dyn/system_config.h \
  ../../../../../../../bsp/pic32mx_skes/bsp.h \
  ../../../../../../../framework/peripheral/ports/plib_ports.h \
@@ -136,16 +136,12 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app.o: \
  ../../../../../../../framework/peripheral/int/processor/../templates/int_VariableOffset_Unsupported.h \
  ../../../../../../../framework/peripheral/int/processor/../templates/int_SoftwareNMI_Unsupported.h \
  ../../../../../../../framework/system/int/sys_int_mapping.h \
- ../src/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/drv_tmr_static.h \
- ../../../../../../../framework/driver/tmr/drv_tmr.h \
- ../../../../../../../framework/driver/driver_common.h \
- ../../../../../../../framework/driver/tmr/tmr_definitions_pic32m.h \
- ../../../../../../../framework/driver/tmr/drv_tmr_compatibility.h \
  ../../../../../../../framework/system/ports/sys_ports.h \
  ../../../../../../../framework/system/ports/sys_ports_definitions.h \
  ../../../../../../../framework/driver/usb/usbfs/drv_usbfs.h \
  ../../../../../../../framework/usb/usb_common.h \
  ../../../../../../../framework/usb/usb_chapter_9.h \
+ ../../../../../../../framework/driver/driver_common.h \
  ../../../../../../../framework/driver/usb/drv_usb.h \
  ../../../../../../../framework/usb/usb_host_client_driver.h \
  ../../../../../../../framework/usb/usb_host.h \
@@ -215,10 +211,11 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app.o: \
  ../../../../../../../framework/usb/src/usb_device_mapping.h \
  ../../../../../../../framework/usb/usb_device_cdc.h \
  ../../../../../../../framework/usb/src/usb_device_function_driver.h \
- ../../../../../../../framework/usb/usb_cdc.h ../src/app.h \
- ../src/app_gen.h
+ ../../../../../../../framework/usb/usb_cdc.h ../src/app_usb.h \
+ ../src/app_gen.h ../src/Mc32gest_SerComm.h ../src/DefMenuGen.h \
+ ../../../../../../../bsp/pic32mx_skes/Mc32DriverLcd.h
 
-../src/app.h:
+../src/app_USB.h:
 
 ../src/system_config/pic32mx_usb_sk2_int_dyn/system_config.h:
 
@@ -492,16 +489,6 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app.o: \
 
 ../../../../../../../framework/system/int/sys_int_mapping.h:
 
-../src/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/drv_tmr_static.h:
-
-../../../../../../../framework/driver/tmr/drv_tmr.h:
-
-../../../../../../../framework/driver/driver_common.h:
-
-../../../../../../../framework/driver/tmr/tmr_definitions_pic32m.h:
-
-../../../../../../../framework/driver/tmr/drv_tmr_compatibility.h:
-
 ../../../../../../../framework/system/ports/sys_ports.h:
 
 ../../../../../../../framework/system/ports/sys_ports_definitions.h:
@@ -511,6 +498,8 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app.o: \
 ../../../../../../../framework/usb/usb_common.h:
 
 ../../../../../../../framework/usb/usb_chapter_9.h:
+
+../../../../../../../framework/driver/driver_common.h:
 
 ../../../../../../../framework/driver/usb/drv_usb.h:
 
@@ -652,6 +641,12 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app.o: \
 
 ../../../../../../../framework/usb/usb_cdc.h:
 
-../src/app.h:
+../src/app_usb.h:
 
 ../src/app_gen.h:
+
+../src/Mc32gest_SerComm.h:
+
+../src/DefMenuGen.h:
+
+../../../../../../../bsp/pic32mx_skes/Mc32DriverLcd.h:

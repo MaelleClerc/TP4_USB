@@ -53,7 +53,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
-#include "app.h"
+#include "app_USB.h"
 
 
 // *****************************************************************************
@@ -433,6 +433,8 @@ void APP_Tasks (void )
     /* Update the application state machine based
      * on the current state */
     int i; 
+    int j;
+    
     switch(appData.state)
     {
         case APP_STATE_INIT:
@@ -547,7 +549,11 @@ void APP_Tasks (void )
                     }
                 }
                 
-                APP_GEN_DisplayChar(appData.readBuffer[0]);
+                //APP_DisplayChar(appData.readBuffer[0]);
+                for (j = 0; j < 30; j++)
+                {
+                    appData.newStringReceived[j] = appData.readBuffer[j];
+                }
                 
                 USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
                         &appData.writeTransferHandle,
@@ -580,7 +586,12 @@ void APP_Tasks (void )
             break;
     }
 }
-
+//saugarde un caractère
+void APP_DisplayChar(char car)
+{
+    appData.newCharReceived = true;
+    appData.newChar = car;
+}
 /*******************************************************************************
  End of File
  */

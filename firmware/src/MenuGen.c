@@ -91,21 +91,23 @@ void Menu_interface(S_ParamGen *pParam)
 void MENU_Execute(S_ParamGen *pParam, bool Local)
 { 
     //initalisation des variable
-    
-
-   
+       
     if (Local == 0)
     {
-        if (Val_save == 1)
+        //lire et décodé
+        
+        Menu_interface(pParam);
+
+        //ajouter les # aux début des 24 ligne
+        Pt_AffichageRemote();
+        
+        
+        if (Local == 0//on veut save les info ou non, modifiier la variable
+                )
         {
             Menu_DemandeSave();
         }
-        else 
-        {
-            Menu_interface(pParam);
-            //ajouter les # aux début des 24 ligne
-            Pt_AffichageRemote();
-        }          
+                
     }                      
     
     else
@@ -169,42 +171,6 @@ void Pt_AffichageRemote()
     lcd_gotoxy(1,4);
     printf_lcd("#");
 }
-/*Design menu de sauvgade OK*/
-/*void Sauvgarde_OK()
-{
-    if(MAJ_LCD_SAVE == 1)
-    {
-        //clear LCD
-        Clear_LCD();
-        //ecrire sur l'affichage
-        lcd_gotoxy(6,2);    
-        printf_lcd("Sauvegarde"); //ligne 2
-        
-    }
-    //ne plus remettre à jour l'affichage save OK
-    MAJ_LCD_SAVE = 0;
-    //mettre à jour le LCD
-    MAJ_LCD_Menu = 1;    
-}/*
-
-/*Design menu de sauvgade ANNULER*/
-/*void Sauvgarde_ANNULE()
-{
-    if(MAJ_LCD_SAVE == 1)
-    {
-        //clear LCD
-        Clear_LCD();
-        //ecrire sur l'affichage    
-        lcd_gotoxy(6,2);    
-        printf_lcd("Sauvegarde"); //ligne 2
-        lcd_gotoxy(6,3);    
-        printf_lcd("ANNULEE!"); //ligne 3 
-    }
-    //ne plus remettre à jour l'affichage save OK
-    MAJ_LCD_SAVE = 0;
-    //mettre à jour le LCD
-    MAJ_LCD_Menu = 1; 
-}*/
 
 
 /*Supprimer toutes les ligne du LCD*/
