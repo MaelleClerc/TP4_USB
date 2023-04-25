@@ -30,6 +30,11 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
     //SPITransfer();
     //afficher un caractère recu 
     
+    // variable locales
+    int16_t Frequence_recue = 0;
+    int16_t Amplitude_recue = 0;
+    int16_t Offset_recu = 0;
+    
     // Traduction de la forme du signal
     switch (appData.newStringReceived[3])
     {
@@ -59,29 +64,20 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
     }
     
     // Traduction de la frequence
-    pParam->Frequence = appData.newStringReceived[6] * 1000;
-    pParam->Frequence += appData.newStringReceived[7] * 100;
-    pParam->Frequence += appData.newStringReceived[8] * 10;
-    pParam->Frequence += appData.newStringReceived[9];
+    Frequence_recue = atoi(&appData.newStringReceived[6]);
     
     // Traduction de l'amplitude
-    pParam->Amplitude = appData.newStringReceived[12] * 10000;
-    pParam->Amplitude += appData.newStringReceived[13] * 1000;
-    pParam->Amplitude += appData.newStringReceived[14] * 100;
-    pParam->Amplitude += appData.newStringReceived[15] * 10;
-    pParam->Amplitude += appData.newStringReceived[16];
+    Amplitude_recue = atoi(&appData.newStringReceived[12]);
     
     // Traduction de l'offset
-    pParam->Amplitude = appData.newStringReceived[20] * 1000;
-    pParam->Amplitude += appData.newStringReceived[21] * 100;
-    pParam->Amplitude += appData.newStringReceived[22] * 10;
-    pParam->Amplitude += appData.newStringReceived[23];
-    if (appData.newStringReceived[19] == '-')
-    {
-        pParam->Offset = - pParam->Offset;
-    }
+    Offset_recu = atoi(&appData.newStringReceived[19]);
     
-    return 0; 
+    // Mise a jour des parametres de pParam
+    pParam->Frequence = Frequence_recue;
+    pParam->Amplitude = Amplitude_recue;
+    pParam->Offset = Offset_recu;
+    
+    return atoi(&appData.newStringReceived[26]); 
 } // GetMessage
 
 

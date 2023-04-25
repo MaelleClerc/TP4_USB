@@ -94,18 +94,16 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
        
     if (Local == 0)
     {
-        //lire et décodé
-        
+        //lire et décodé        
         Menu_interface(pParam);
 
         //ajouter les # aux début des 24 ligne
         Pt_AffichageRemote();
         
         
-        if (Local == 0//on veut save les info ou non, modifiier la variable
-                )
+        if (Flag_Save)//on veut save les info ou non, modifiier la variable               
         {
-            Menu_DemandeSave();
+            Menu_Save();
         }
                 
     }                      
@@ -134,7 +132,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 
 
 /*Design menu de sauvgade*/
-void Menu_DemandeSave()
+void Menu_Save()
 {
     //executer 1 seul fois
     if(MAJ_LCD_Menu == 0)
@@ -152,8 +150,7 @@ void Menu_DemandeSave()
         
     }
     //ne plus remettre à jour l'affichage save
-    MAJ_LCD_Menu = 1;
-    
+    MAJ_LCD_Menu = 1;   
 }
 
 void Pt_AffichageRemote()
@@ -182,6 +179,10 @@ void Clear_LCD()
     lcd_ClearLine(4);
 }
 
+bool  ToggleFlag_Save()
+{
+    return (Flag_Save);
+}
 
 /*gestion de l'affichage avec le PEG12*/
 void Menu_GESTION_PEG12(S_ParamGen *pParam)
