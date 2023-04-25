@@ -59,6 +59,10 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "DefMenuGen.h"
 #include "MenuGen.h"
 #include "bsp.h"
+#include "GesPec12.h"
+#include "Generateur.h"
+#include "Mc32gestSpiDac.h"
+#include "Mc32gest_SerComm.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -123,7 +127,7 @@ bool Local;
 void APP_GEN_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-     APP_GEN_UpdateState(APP_STATE_INIT);
+     APP_GEN_UpdateState(APP_GEN_STATE_INIT);
 
     
     /* TODO: Initialize your application's state machine and other
@@ -159,8 +163,26 @@ void APP_GEN_Tasks ( void )
             lcd_gotoxy(1,3);
             printf_lcd("Maelle Clerc");
             
+            // Init SPI DAC
+            SPI_InitLTC2604();  
+
+            // Initialisation du generateur
+            GENSIG_Initialize(&LocalParamGen);
+            //realiser le signal
+            GENSIG_UpdateSignal(&LocalParamGen);
+            //mettre à jour la période
+            GENSIG_UpdatePeriode(&LocalParamGen);
+            
+            //Init Pec12Init
+            Pec12Init();
+            
+            /* initialisation des timers */
+            DRV_TMR0_Start();
+            DRV_TMR1_Start();  
+            
             //Synchroniser les paramètres
             RemoteParamGen = LocalParamGen;
+            
             
             APP_GEN_UpdateState(APP_GEN_STATE_WAIT);
             
@@ -183,6 +205,10 @@ void APP_GEN_Tasks ( void )
             if (USB_DETECT)
             {
                 Local = 0;
+                if(GetMessage(0, &RemoteParamGen, 0))
+                {
+                    ToggleFlag_Save();
+                }
                 MENU_Execute(&RemoteParamGen, Local);
             }
             else

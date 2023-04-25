@@ -23,6 +23,7 @@ typedef struct {
       int16_t Offset;
 
 } S_No_save;
+bool Flag_Save;
 
 ////////////*prototype de fonction*//////////
 // Initialisation du menu et des parametres
@@ -32,17 +33,17 @@ void Menu_interface(S_ParamGen *pParam);
 // Execution du menu, appel cyclique depuis l'application
 void MENU_Execute(S_ParamGen *pParam, bool Local);
 /*Design menu de sauvgade*/
-void Menu_DemandeSave();
-/*Design menu de sauvgade OK*/
-//void Sauvgarde_OK();
-/*Design menu de sauvgade ANNULER*/
-//void Sauvgarde_ANNULE();
+void Menu_Save();
+
 //afficge le #devant les 4 lignes
 void Pt_AffichageRemote();
 /*Supprimer toutes les ligne du LCD*/
 void Clear_LCD();
 /*gestion de l'affichage avec le PEG12*/
-void Menu_GESTION_PEG12(S_ParamGen *pParam);            
+void Menu_GESTION_PEG12(S_ParamGen *pParam);      
+
+//flag Save
+bool  ToggleFlag_Save(void);
 
 #endif
 

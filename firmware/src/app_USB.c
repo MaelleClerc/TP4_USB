@@ -545,7 +545,7 @@ void APP_Tasks (void )
                 {
                     if((appData.readBuffer[i] != 0x0A) && (appData.readBuffer[i] != 0x0D))
                     {
-                        appData.readBuffer[i] = appData.readBuffer[i] + 1;
+                        appData.readBuffer[i] = appData.readBuffer[i];
                     }
                 }
                 
