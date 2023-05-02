@@ -63,6 +63,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "Generateur.h"
 #include "Mc32gestSpiDac.h"
 #include "Mc32gest_SerComm.h"
+#include "app_USB.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -87,6 +88,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 APP_GEN_DATA app_genData;
 S_ParamGen LocalParamGen;
 S_ParamGen RemoteParamGen;
+APP_DATA appData;
 //flag permettant d'initialiser l'ecran
 uint8_t flag_tour = 1 ;
 bool Local;
@@ -204,11 +206,13 @@ void APP_GEN_Tasks ( void )
             //execution menu
             if (USB_DETECT)
             {
-                Local = 0;
-                if(GetMessage(0, &RemoteParamGen, 0))
+                Local = 0;              
+                if(GetMessage((int8_t *)appData.newStringReceived, &RemoteParamGen, 0))
                 {
                     ToggleFlag_Save();
                 }
+
+                SendMessage((int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save);
                 MENU_Execute(&RemoteParamGen, Local);
             }
             else
