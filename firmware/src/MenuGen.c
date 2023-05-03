@@ -20,6 +20,7 @@
 
 #define TIMER_LCD_SAUVGARDE 100
 #define TIMER_S9_SAVE 199
+#define AFK_TIME 5000 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
 
 E_MENU SELECTION_MENU;
 S_No_save Val;
@@ -27,11 +28,13 @@ S_No_save Val;
 S_Pec12_Descriptor Pec12;
 S_S9_Descriptor S9;
 
+//flag
+S_Flag FLAG;
+bool OLD_Local ;
 
 //déclaration constate tableau
 const char tb_MenuFormes [4] [21] = { "Sinus", "Triangle", "DentDeScie", "Carre" };
 
-uint16_t static MAJ_LCD_Menu;
 
 // Initialisation du menu et des parametres
 void MENU_Initialize(S_ParamGen *pParam)
@@ -43,10 +46,11 @@ void MENU_Initialize(S_ParamGen *pParam)
     Val.Amplitude = pParam->Amplitude;
     Val.Frequence = pParam->Frequence;
    
-    
+    //clear LCD
+    Clear_LCD();
     //menu principale
     Menu_interface(pParam);
-    
+    OLD_Local = 1;
     //initaliser premiemiere parametre aÂ  pointer dans le menu
     SELECTION_MENU = MENU_FORME;  
 }
@@ -54,8 +58,7 @@ void MENU_Initialize(S_ParamGen *pParam)
 //gere l'affichage LCD pour le menu principal
 void Menu_interface(S_ParamGen *pParam)
 {
-    //clear LCD
-    Clear_LCD();
+    
     //GERER L'AFFICHAGE DU MENU 
     //Ligne 1
     lcd_bl_on();    
@@ -91,43 +94,59 @@ void Menu_interface(S_ParamGen *pParam)
 void MENU_Execute(S_ParamGen *pParam, bool Local)
 { 
     //initalisation des variable
-       
+    uint16_t static Compt_SAVE = 0;
+    
+    
     if (Local == 0)
     {
-        //lire et décodé        
-        Menu_interface(pParam);
-
-        //ajouter les # aux début des 24 ligne
-        Pt_AffichageRemote();
-        
-        
-        if (Flag_Save)//on veut save les info ou non, modifiier la variable               
+        if (Flag_Save_OK())//on veut save les info ou non, modifiier la variable               
         {
             Menu_Save();
+            if ((Flag_RefreshLCD())&&(TIMER_LCD_SAUVGARDE < Compt_SAVE))
+            {
+                //lire et décodé        
+                Menu_interface(pParam);
+                //ajouter les # aux début des 24 ligne
+                Pt_AffichageRemote();
+                // mettre le compteur à 0 et le refresh LCD
+                Compt_SAVE = 0;
+                FlagRefreshLCD_Clear();
+            } 
         }
-                
-    }                      
-    
+        else
+        {
+            if (Local != OLD_Local)
+            {
+                //lire et décodé        
+                Menu_interface(pParam);
+
+                //ajouter les # aux début des 24 ligne
+                Pt_AffichageRemote();
+            }
+            else
+            {
+                //mettre à jour sellement les valeurs
+                MAJ_Valeur (pParam);
+            }            
+        }                
+    }                        
     else
     {
         //mettre à jour l'affichage si le menu de sauvegarde a été activé
-        if (MAJ_LCD_Menu == 0)
+        if (Local != OLD_Local)
         {
-            /*gestion de l'affichage avec le PEG12*/
-            Menu_GESTION_PEG12(pParam);    
-        }
-        else 
-        {
-           
+            //clear LCD
+            Clear_LCD();            
             //menu principale
             Menu_interface(pParam);
-            /*gestion de l'affichage avec le PEG12*/
-            Menu_GESTION_PEG12(pParam);  
-            //menu mis à jour
-            MAJ_LCD_Menu = 0;
-
+            
+            //initaliser premiemiere parametre aÂ  pointer dans le menu
+            SELECTION_MENU = MENU_FORME;  
         }
+        /*gestion de l'affichage avec le PEG12*/
+        Menu_GESTION_PEG12(pParam); 
     }
+    OLD_Local = Local;
 }    
 
 
@@ -135,7 +154,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 void Menu_Save()
 {
     //executer 1 seul fois
-    if(MAJ_LCD_Menu == 0)
+    if(Flag_Save_OK())
     {
        // //gestion LCD// //
         //clear LCD
@@ -147,10 +166,11 @@ void Menu_Save()
         printf_lcd("OK!"); //ligne 3 
         
         //enregistrer les paramètre reçu//
-        
-    }
-    //ne plus remettre à jour l'affichage save
-    MAJ_LCD_Menu = 1;   
+        //ne plus remettre à jour l'affichage save
+        FlagSave_Clear();
+        //remettre à jour LCD 
+        Flag_RefreshLCD();       
+    }  
 }
 
 void Pt_AffichageRemote()
@@ -168,6 +188,21 @@ void Pt_AffichageRemote()
     lcd_gotoxy(1,4);
     printf_lcd("#");
 }
+void MAJ_Valeur (S_ParamGen *pParam)
+{
+    //afficher valeur
+    lcd_gotoxy(11,1);
+    printf_lcd("%s", tb_MenuFormes[pParam->Forme]);
+    //afficher valeur
+    lcd_gotoxy(13,2);
+    printf_lcd("%d",  pParam->Frequence);
+    //afficher valeur
+    lcd_gotoxy(13,3);
+    printf_lcd("%3d",  pParam->Amplitude);
+    //afficher valeur
+    lcd_gotoxy(13,4);
+    printf_lcd("%d",  pParam->Offset);
+}
 
 
 /*Supprimer toutes les ligne du LCD*/
@@ -177,16 +212,46 @@ void Clear_LCD()
     lcd_ClearLine(2);
     lcd_ClearLine(3);
     lcd_ClearLine(4);
+    //mettre le flag à 0
+    FlagRefreshLCD_Clear();
 }
 
-bool  ToggleFlag_Save()
+bool  Flag_Save_OK()
 {
-    return (Flag_Save);
+    return (FLAG.SAVE);
+}
+
+void FlagSave_Clear(void)
+{
+    FLAG.SAVE = 0;
+}
+bool  Flag_RefreshLCD()
+{
+    return (FLAG.REFRESH);
+}
+
+void FlagRefreshLCD_Clear(void)
+{
+    FLAG.REFRESH = 0;
 }
 
 /*gestion de l'affichage avec le PEG12*/
 void Menu_GESTION_PEG12(S_ParamGen *pParam)
 {
+    if((Pec12IsPlus() ==0) && (Pec12IsMinus() == 0) && (Pec12IsOK() == 0)&& (Pec12IsESC() == 0) && (S9.OK == 0))
+    {
+       //Test durÃ©e d'inactivitÃ© > 5sec
+       if(Pec12.InactivityDuration >= AFK_TIME)
+       {
+           //Pec12.InactivityDuration = 0;
+           lcd_bl_off();
+           Pec12.NoActivity = 1;
+       }
+       else
+       {
+           Pec12.InactivityDuration ++;
+       }
+    }
    switch (SELECTION_MENU)
     {
         //Menu Forme//
@@ -237,7 +302,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                 //Test si incrementer la forme
                 if (Pec12IsPlus())
                 {
-                    //test si egal aÂ la Singnal carree
+                    //test si egal aÂ la Singnal carree
                     if(Val.Forme == 3)
                     {
                         Val.Forme = 0;
@@ -365,7 +430,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                 //decrementer la valeur de la frequence
                 else
                 {
-                    //test si inferieur ou Ã©gal aÂ la frequence min
+                    //test si inferieur ou Ã©gal aÂ la frequence min
                     if(Val.Frequence <= 20 )
                     {
                         Val.Frequence = 2000;
@@ -464,7 +529,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                 //incrementer la valeur de l'amplitude 
                 if (Pec12IsPlus())
                 {
-                    //test si superieur ou egal aÂ  l'amplitude max
+                    //test si superieur ou egal aÂ  l'amplitude max
                     if(Val.Amplitude >= 10000 )
                     {
                         Val.Amplitude = 0;
@@ -478,7 +543,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                 //decrementer la valeur de l'amplitude 
                 else
                 {
-                    //test si inferieur ou egal eÂ  l'amplitude min
+                    //test si inferieur ou egal eÂ  l'amplitude min
                     if(Val.Amplitude <= 0 )
                     {
                         Val.Amplitude = 10000;
@@ -598,7 +663,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                 //decrementer la valeur de l'offset
                 else
                 {
-                    //test si inferieur ou egal aÂ  l'offset min
+                    //test si inferieur ou egal aÂ  l'offset min
                     if(Val.Offset <= -5000 )
                     {
                         Val.Offset = (-5000);

@@ -31,7 +31,7 @@
 #include <stdint.h>
 #include "bsp.h"
 
-#define AFK_TIME 5000 //Durée d'inactivité avant d'étaindre le rétro-éclairage
+
 
 // Descripteur des sinaux
 S_SwitchDescriptor DescrA;
@@ -209,7 +209,7 @@ void ScanPec12 (bool ValA, bool ValB, bool ValPB)
     
     
 
-    //Increment ou reset du compteur AFK
+   /* //Increment ou reset du compteur AFK
     if((Pec12.Inc ==0) && (Pec12.Dec == 0) && (DescrPB.bits.KeyPrevInputValue == 1)&&(S9.OK == 0))
     {
         //Test durée d'inactivité > 5sec
@@ -233,7 +233,7 @@ void ScanPec12 (bool ValA, bool ValB, bool ValPB)
            lcd_bl_on();  
         }
         Pec12.InactivityDuration = 0;
-    }    
+    }    */
 } //end of ScanPec12
 
 

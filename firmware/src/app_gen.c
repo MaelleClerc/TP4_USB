@@ -209,10 +209,13 @@ void APP_GEN_Tasks ( void )
                 Local = 0;              
                 if(GetMessage((int8_t *)appData.newStringReceived, &RemoteParamGen, 0))
                 {
-                    ToggleFlag_Save();
+                    Flag_Save_OK();
                 }
-
-                SendMessage((int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save);
+                else
+                {
+                    //clear flag save se fait losque les valeurs ont été enregistré
+                }
+                //SendMessage((int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save_OK());
                 MENU_Execute(&RemoteParamGen, Local);
             }
             else
