@@ -47,7 +47,9 @@ void Clear_LCD();
 void Menu_GESTION_PEG12(S_ParamGen *pParam);      
 
 //flag Save
-bool  Flag_Save_OK(void);
+bool  Flag_Save(void);
+
+void FlagSave_OK(void);
 
 void FlagSave_Clear(void);
 

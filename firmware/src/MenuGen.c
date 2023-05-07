@@ -19,14 +19,14 @@
 #include "bsp.h"
 
 #define TIMER_LCD_SAUVGARDE 100
-#define TIMER_S9_SAVE 199
-#define AFK_TIME 5000 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
+//#define TIMER_S9_SAVE 199
+#define AFK_TIME 500 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
 
 E_MENU SELECTION_MENU;
 S_No_save Val;
 // Structure pour les traitement du Pec12
 S_Pec12_Descriptor Pec12;
-S_S9_Descriptor S9;
+//S_S9_Descriptor S9;
 
 //flag
 S_Flag FLAG;
@@ -49,10 +49,12 @@ void MENU_Initialize(S_ParamGen *pParam)
     //clear LCD
     Clear_LCD();
     //menu principale
+    
     Menu_interface(pParam);
     OLD_Local = 1;
     //initaliser premiemiere parametre aÂ  pointer dans le menu
     SELECTION_MENU = MENU_FORME;  
+    
 }
 
 //gere l'affichage LCD pour le menu principal
@@ -62,8 +64,8 @@ void Menu_interface(S_ParamGen *pParam)
     //GERER L'AFFICHAGE DU MENU 
     //Ligne 1
     lcd_bl_on();    
-    lcd_gotoxy(2,1);
-    printf_lcd("Forme");         
+    lcd_gotoxy(1,1);
+    printf_lcd("*Forme");         
     lcd_gotoxy(11,1);
     printf_lcd("%s", tb_MenuFormes[pParam->Forme]);
     
@@ -99,11 +101,13 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
     
     if (Local == 0)
     {
-        if (Flag_Save_OK())//on veut save les info ou non, modifiier la variable               
+        if (Flag_Save())//on veut save les info ou non, modifiier la variable               
         {
             Menu_Save();
             if ((Flag_RefreshLCD())&&(TIMER_LCD_SAUVGARDE < Compt_SAVE))
             {
+                //enregistrer les datas dans la flash
+                NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes 
                 //lire et décodé        
                 Menu_interface(pParam);
                 //ajouter les # aux début des 24 ligne
@@ -135,8 +139,10 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
         //mettre à jour l'affichage si le menu de sauvegarde a été activé
         if (Local != OLD_Local)
         {
-            //clear LCD
-            Clear_LCD();            
+            //clear LCD et allumer le LCD
+            Clear_LCD();
+            //arreter le compteur
+            Pec12ClearInactivity();
             //menu principale
             Menu_interface(pParam);
             
@@ -154,7 +160,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 void Menu_Save()
 {
     //executer 1 seul fois
-    if(Flag_Save_OK())
+    if(Flag_Save())
     {
        // //gestion LCD// //
         //clear LCD
@@ -216,9 +222,13 @@ void Clear_LCD()
     FlagRefreshLCD_Clear();
 }
 
-bool  Flag_Save_OK()
+bool  Flag_Save(void)
 {
     return (FLAG.SAVE);
+}
+void FlagSave_OK(void)
+{
+    FLAG.SAVE = 1;
 }
 
 void FlagSave_Clear(void)
@@ -238,486 +248,517 @@ void FlagRefreshLCD_Clear(void)
 /*gestion de l'affichage avec le PEG12*/
 void Menu_GESTION_PEG12(S_ParamGen *pParam)
 {
-    if((Pec12IsPlus() ==0) && (Pec12IsMinus() == 0) && (Pec12IsOK() == 0)&& (Pec12IsESC() == 0) && (S9.OK == 0))
+    if((Pec12IsPlus() ==0) && (Pec12IsMinus() == 0) && (Pec12IsOK() == 0)&& (Pec12IsESC() == 0) /*&& (S9.OK == 0)*/)
     {
        //Test durÃ©e d'inactivitÃ© > 5sec
        if(Pec12.InactivityDuration >= AFK_TIME)
        {
            //Pec12.InactivityDuration = 0;
            lcd_bl_off();
-           Pec12.NoActivity = 1;
+            Pec12.NoActivity = 1;
        }
        else
        {
            Pec12.InactivityDuration ++;
        }
+       
     }
-   switch (SELECTION_MENU)
+    else
     {
-        //Menu Forme//
-        case MENU_FORME:
+        //arreter l'inactiviter de LCD 
+        if (Pec12NoActivity())
         {
-            //ecrire sur la premiere ligne de la premiere colonne "*" du LCD
-            lcd_gotoxy(1,1);
-            printf_lcd("*");
-
-            //Tester si une touche est active
-            if(Pec12IsPlus()||Pec12IsMinus()||Pec12IsOK())
-            {
-                //incrementer choix du menu
-                if (Pec12IsPlus())
-                {
-                    //modifier la sÃ©lection du menu
-                    SELECTION_MENU = MENU_FREQU;
-                }
-                //decrementer choix du menu
-                else if (Pec12IsMinus())
-                {
-                    //modifier la sÃ©lection du menu
-                    SELECTION_MENU = MENU_OFFSET;
-                }
-                //Valider le choix
-                else if (Pec12IsOK())
-                {
-                    //modifier la valeur 
-                    SELECTION_MENU = MENU_FORME_VALEUR;
-                }
+           lcd_bl_on();  
+        }
+        //arreter le compteur
+        Pec12ClearInactivity();
+        
+        switch (SELECTION_MENU)
+         {
+             //Menu Forme//
+             case MENU_FORME:
+             {
                 //effacer "*"
                 lcd_gotoxy( 1, 1);
                 printf_lcd(" ");
-            }
 
-        break;       
-        }
+                 //Tester si une touche est active
+                 if(Pec12IsPlus()||Pec12IsMinus()||Pec12IsOK())
+                 {
+                     //incrementer choix du menu
+                     if (Pec12IsPlus())
+                     {
+                         //modifier la sÃ©lection du menu
+                         SELECTION_MENU = MENU_FREQU;
+                         //ecrire  "*" du LCD pour selectionner la fréquence
+                         lcd_gotoxy(1,2);
+                         printf_lcd("*");
+                     }
+                     //decrementer choix du menu
+                     else if (Pec12IsMinus())
+                     {
+                         //modifier la sÃ©lection du menu
+                         SELECTION_MENU = MENU_OFFSET;
+                         //ecrire  "*" du LCD pour selectionner l'offset
+                         lcd_gotoxy(1,4);
+                         printf_lcd("*");
+                         
+                     }
+                     //Valider le choix
+                     else if (Pec12IsOK())
+                     {
+                         //modifier la valeur 
+                         SELECTION_MENU = MENU_FORME_VALEUR;
+                         //ecrire  "?" du LCD pour modifier la valeur
+                         lcd_gotoxy(1,1);
+                         printf_lcd("?");
+                     }
+                     
+                 }
 
-        // Menu modifier la Forme de signal //
-        case MENU_FORME_VALEUR:
-        {
-            lcd_gotoxy(1,1);
-            printf_lcd("?");
+             break;       
+             }
 
-            //Tester si une touche est active
-            if(Pec12IsPlus()||Pec12IsMinus())
-            {
-                //Test si incrementer la forme
-                if (Pec12IsPlus())
-                {
-                    //test si egal aÂ la Singnal carree
-                    if(Val.Forme == 3)
-                    {
-                        Val.Forme = 0;
-                    }
-                    //sinon incrementer pour obtenir la nouvelle forme
-                    else
-                    {
-                        Val.Forme ++;
-                    }  
-                }
-                //decrementer la frome
-                else
-                {
-                    //test si egal Signal Sinus
-                    if(Val.Forme ==  0)
-                    {
-                        Val.Forme = 3;
-                    }
-                    //sinon decrementer pour obtenir la nouvelle forme
-                    else
-                    {
-                        Val.Forme --;
-                    }
-                }
-                //supprimer les caractère sur la 2ere ligne
-                lcd_ClearLine(1);
-                //afficher "?Forme"
-                lcd_gotoxy(1,1);
-                printf_lcd("?Forme");
-                //afficher valeur
-                lcd_gotoxy(11,1);
-                printf_lcd("%s", tb_MenuFormes[Val.Forme]);
-            }
-            //Tester si une touche est active
-            if(Pec12IsOK()||Pec12IsESC())
-            {
-                //si on appuye sur ok
-                if (Pec12IsOK())
-                {
-                    //sauvgarder la nouvelle valeur
-                    pParam->Forme = Val.Forme; 
-                    //Mettre a jour forme signal
-                    GENSIG_UpdateSignal(pParam);
-                }
-                //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire                    
-                else 
-                {
-                    //Récuperer la valeur de base
-                    Val.Forme = pParam->Forme;
-                }
-                //GESTION AFFICHAGE//
-                //supprimer les caractère sur la 2ere ligne
-                lcd_ClearLine(1);
-                //afficher "*Forme"
-                lcd_gotoxy(1,1);
-                printf_lcd("*Forme"); 
-                //afficher valeur
-                lcd_gotoxy(11,1);
-                printf_lcd("%s", tb_MenuFormes[Val.Forme]);
+             // Menu modifier la Forme de signal //
+             case MENU_FORME_VALEUR:
+             {
+                
+                 //Tester si une touche est active
+                 if(Pec12IsPlus()||Pec12IsMinus())
+                 {
+                     //Test si incrementer la forme
+                     if (Pec12IsPlus())
+                     {
+                         //test si egal aÂ la Singnal carree
+                         if(Val.Forme == 3)
+                         {
+                             Val.Forme = 0;
+                         }
+                         //sinon incrementer pour obtenir la nouvelle forme
+                         else
+                         {
+                             Val.Forme ++;
+                         }  
+                     }
+                     //decrementer la frome
+                     else
+                     {
+                         //test si egal Signal Sinus
+                         if(Val.Forme ==  0)
+                         {
+                             Val.Forme = 3;
+                         }
+                         //sinon decrementer pour obtenir la nouvelle forme
+                         else
+                         {
+                             Val.Forme --;
+                         }
+                     }
+                     //supprimer les caractère sur la 2ere ligne
+                     lcd_ClearLine(1);
+                     //afficher "?Forme"
+                     lcd_gotoxy(1,1);
+                     printf_lcd("?Forme");
+                     //afficher valeur
+                     lcd_gotoxy(11,1);
+                     printf_lcd("%s", tb_MenuFormes[Val.Forme]);
+                 }
+                 //Tester si une touche est active
+                 if(Pec12IsOK()||Pec12IsESC())
+                 {
+                     //si on appuye sur ok
+                     if (Pec12IsOK())
+                     {
+                         //sauvgarder la nouvelle valeur
+                         pParam->Forme = Val.Forme; 
+                         //Mettre a jour forme signal
+                         GENSIG_UpdateSignal(pParam);
+                     }
+                     //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire                    
+                     else 
+                     {
+                         //Récuperer la valeur de base
+                         Val.Forme = pParam->Forme;
+                     }
+                     //GESTION AFFICHAGE//
+                     //supprimer les caractère sur la 2ere ligne
+                     lcd_ClearLine(1);
+                     //afficher "*Forme"
+                     lcd_gotoxy(1,1);
+                     printf_lcd("*Forme"); 
+                     //afficher valeur
+                     lcd_gotoxy(11,1);
+                     printf_lcd("%s", tb_MenuFormes[Val.Forme]);
 
-                //retourner sur le menu selection 
-                SELECTION_MENU = MENU_FORME;
-            }
-        break;       
-        }
+                     //retourner sur le menu selection 
+                     SELECTION_MENU = MENU_FORME;
+                 }
+             break;       
+             }
 
-        // Menu Frequence //
-        case MENU_FREQU:
-        {
-            //ecrire sur la 2eme ligne de la premiere colonne "*" du LCD
-            lcd_gotoxy(1,2);
-            printf_lcd("*");
-            //Tester si une touche est active
-            if(Pec12IsPlus()||Pec12IsMinus()||Pec12IsOK())
-            {
-                //incrementer choix du menu
-                if (Pec12IsPlus())
-                {  
-                    //modifier la sÃ©lection du menu
-                    SELECTION_MENU = MENU_AMPLI;
-                }
-                //decrementer choix du menu
-                else if (Pec12IsMinus())
-                {
-                    //modifier la sÃ©lection du menu
-                    SELECTION_MENU = MENU_FORME;
-                }
-                //Valider le choix
-                else if (Pec12IsOK())
-                {
-                    //modifier la valeur
-                    SELECTION_MENU = MENU_FREQU_VALEUR;
-                }
-                //effacer "*"
+             // Menu Frequence //
+             case MENU_FREQU:
+             {
+                 //effacer "*"
                 lcd_gotoxy( 1, 2);
                 printf_lcd(" ");
-            }
-        break;       
-        }
-        // Menu modifier la frequence du signal //
-        case MENU_FREQU_VALEUR:
-        {
-            //afiicher un "?" sur la 2 eme ligne, la premiere colonne
-            lcd_gotoxy(1,2);
-            printf_lcd("?");
+
+                 //Tester si une touche est active
+                 if(Pec12IsPlus()||Pec12IsMinus()||Pec12IsOK())
+                 {
+                     //incrementer choix du menu
+                     if (Pec12IsPlus())
+                     {  
+                         //modifier la sÃ©lection du menu
+                         SELECTION_MENU = MENU_AMPLI;
+                         //ecrire  "*" du LCD pour selectionner l'ampli
+                         lcd_gotoxy(1,3);
+                         printf_lcd("*");
+                     }
+                     //decrementer choix du menu
+                     else if (Pec12IsMinus())
+                     {
+                         //modifier la sÃ©lection du menu
+                         SELECTION_MENU = MENU_FORME;
+                         //ecrire  "*" du LCD pour selectionner la forme
+                         lcd_gotoxy(1,1);
+                         printf_lcd("*");
+                     }
+                     //Valider le choix
+                     else if (Pec12IsOK())
+                     {
+                         //modifier la valeur
+                         SELECTION_MENU = MENU_FREQU_VALEUR;
+                         lcd_gotoxy(1,2);
+                         //ecrire  "?" du LCD pour modifier la valeur
+                         lcd_gotoxy(1,2);
+                         printf_lcd("?");
+                     }
+                     
+                 }
+             break;       
+             }
+             // Menu modifier la frequence du signal //
+             case MENU_FREQU_VALEUR:
+             {
+
+                 //Tester si une touche est active
+                 if(Pec12IsPlus()||Pec12IsMinus())
+                 {
+                     if (Pec12IsPlus())
+                     {
+                         //test si superieur ou egal a la frequence max
+                         if(Val.Frequence >= 2000 )
+                         {
+                             Val.Frequence = 20;                        
+                         }
+                         //sinon incrementer par pas de 20
+                         else
+                         {
+                             Val.Frequence = Val.Frequence +20;
+                         }                        
+                     }
+
+                     //decrementer la valeur de la frequence
+                     else
+                     {
+                         //test si inferieur ou Ã©gal aÂ la frequence min
+                         if(Val.Frequence <= 20 )
+                         {
+                             Val.Frequence = 2000;
+                         }
+                         //sinon decrementer par pas de 20
+                         else
+                         {
+                             //recuperer l'ancienne valeur
+                             Val.Frequence = Val.Frequence -20;
+                         }
+                     }
+                     //GESTION AFFICHAGE//
+                     //supprimer les caractère sur la 2ere ligne
+                     lcd_ClearLine(2);
+                     //afficher "?Freq[Hz]"
+                     lcd_gotoxy(1,2);
+                     printf_lcd("?Freq[Hz]");
+                     //afficher valeur
+                     lcd_gotoxy(13,2);
+                     printf_lcd("%d", Val.Frequence);
+                 }
+                 //Tester si une touche est active
+                 if(Pec12IsOK()||Pec12IsESC())
+                 {
+                     //si on appuye sur ok
+                     if (Pec12IsOK())
+                     {
+                         //sauvgarder la nouvelle valeur 
+                         pParam->Frequence = Val.Frequence;
+                         GENSIG_UpdatePeriode(pParam);
+                     }
+                     //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire
+                     else 
+                     {
+                         Val.Frequence = pParam->Frequence;
+                     }
+                     //GESTION AFFICHAGE//
+                     //supprimer les caractère sur la 2ere ligne
+                     lcd_ClearLine(2);
+                     //afficher "?Freq[Hz]"
+                     lcd_gotoxy(1,2);
+                     printf_lcd("*Freq[Hz]"); 
+                     //afficher valeur
+                     lcd_gotoxy(13,2);
+                     printf_lcd("%d", Val.Frequence);
+                     //retourner sur le menu selection 
+                     SELECTION_MENU = MENU_FREQU;
+                 }
 
 
-            //Tester si une touche est active
-            if(Pec12IsPlus()||Pec12IsMinus())
-            {
-                if (Pec12IsPlus())
-                {
-                    //test si superieur ou egal a la frequence max
-                    if(Val.Frequence >= 2000 )
-                    {
-                        Val.Frequence = 20;                        
-                    }
-                    //sinon incrementer par pas de 20
-                    else
-                    {
-                        Val.Frequence = Val.Frequence +20;
-                    }                        
-                }
-
-                //decrementer la valeur de la frequence
-                else
-                {
-                    //test si inferieur ou Ã©gal aÂ la frequence min
-                    if(Val.Frequence <= 20 )
-                    {
-                        Val.Frequence = 2000;
-                    }
-                    //sinon decrementer par pas de 20
-                    else
-                    {
-                        //recuperer l'ancienne valeur
-                        Val.Frequence = Val.Frequence -20;
-                    }
-                }
-                //GESTION AFFICHAGE//
-                //supprimer les caractère sur la 2ere ligne
-                lcd_ClearLine(2);
-                //afficher "?Freq[Hz]"
-                lcd_gotoxy(1,2);
-                printf_lcd("?Freq[Hz]");
-                //afficher valeur
-                lcd_gotoxy(13,2);
-                printf_lcd("%d", Val.Frequence);
-            }
-            //Tester si une touche est active
-            if(Pec12IsOK()||Pec12IsESC())
-            {
-                //si on appuye sur ok
-                if (Pec12IsOK())
-                {
-                    //sauvgarder la nouvelle valeur 
-                    pParam->Frequence = Val.Frequence;
-                    GENSIG_UpdatePeriode(pParam);
-                }
-                //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire
-                else 
-                {
-                    Val.Frequence = pParam->Frequence;
-                }
-                //GESTION AFFICHAGE//
-                //supprimer les caractère sur la 2ere ligne
-                lcd_ClearLine(2);
-                //afficher "?Freq[Hz]"
-                lcd_gotoxy(1,2);
-                printf_lcd("*Freq[Hz]"); 
-                //afficher valeur
-                lcd_gotoxy(13,2);
-                printf_lcd("%d", Val.Frequence);
-                //retourner sur le menu selection 
-                SELECTION_MENU = MENU_FREQU;
-            }
-
-
-        break;       
-        }
-        // Menu Amplification //
-        case MENU_AMPLI:
-        {
-            //ecrire sur la 3eme ligne de la premiere colonne "*" du LCD
-            lcd_gotoxy(1,3);
-            printf_lcd("*");
-            //Tester si une touche est active
-            if(Pec12IsPlus()||Pec12IsMinus()||Pec12IsOK())
-            {
-                //incrementer choix du menu
-                if (Pec12IsPlus())
-                {
-                    //modifier la sÃ©lection du menu
-                    SELECTION_MENU = MENU_OFFSET;
-                }
-                //decrementer choix du menu
-                else if (Pec12IsMinus())
-                {
-                    //modifier la sÃ©lection du menu
-                    SELECTION_MENU = MENU_FREQU;
-                }
-                //Valider le choix
-                else if (Pec12IsOK())
-                {  
-                    //modifier la valeur
-                    SELECTION_MENU = MENU_AMPLI_VALEUR;
-                }
+             break;       
+             }
+             
+             // Menu Amplification //
+             case MENU_AMPLI:
+             {
                 //effacer "*"
                 lcd_gotoxy( 1, 3);
                 printf_lcd(" ");
-            }
-        break;       
-        }
-        // Menu modifier l'amplitude du signal //
-        case MENU_AMPLI_VALEUR:
-        {
-            //afiicher un "?" sur la 3 eme ligne, 1a 1 ere colonne
-            lcd_gotoxy(1,3);
-            printf_lcd("?");
 
-            //Tester si une touche est active
-            if(Pec12IsPlus()||Pec12IsMinus())
-            {
-                //incrementer la valeur de l'amplitude 
-                if (Pec12IsPlus())
-                {
-                    //test si superieur ou egal aÂ  l'amplitude max
-                    if(Val.Amplitude >= 10000 )
-                    {
-                        Val.Amplitude = 0;
-                    }
-                    //sinon incrementer par pas de 100
-                    else
-                    {
-                        Val.Amplitude = Val.Amplitude +100;
-                    } 
-                }
-                //decrementer la valeur de l'amplitude 
-                else
-                {
-                    //test si inferieur ou egal eÂ  l'amplitude min
-                    if(Val.Amplitude <= 0 )
-                    {
-                        Val.Amplitude = 10000;
-                    }
-                    //sinon decrementer par pas de 100
-                    else
-                    {
-                        Val.Amplitude = Val.Amplitude -100;
-                    }
-                }
-                //GESTION AFFICHAGE//
-                //supprimer les caractère sur la 3ere ligne
-                lcd_ClearLine(3);
-                //afficher "?Ampl[mV]"
-                lcd_gotoxy(1,3);
-                printf_lcd("?Ampl[mV]");
-                //afficher valeur
-                lcd_gotoxy(13,3);
-                printf_lcd("%3d", Val.Amplitude);
-            }
-            //Tester si une touche est active
-            if(Pec12IsOK()||Pec12IsESC())
-            {
-                //si on appuye sur ok
-                if (Pec12IsOK())
-                {
-                    //sauvgarder la nouvelle valeur 
-                     pParam->Amplitude = Val.Amplitude;
+                 //Tester si une touche est active
+                 if(Pec12IsPlus()||Pec12IsMinus()||Pec12IsOK())
+                 {
+                     //incrementer choix du menu
+                     if (Pec12IsPlus())
+                     {
+                         //modifier la sÃ©lection du menu
+                         SELECTION_MENU = MENU_OFFSET;
+                         //ecrire  "*" du LCD pour selectionner l'offset
+                         lcd_gotoxy(1,4);
+                         printf_lcd("*");
+                     }
+                     //decrementer choix du menu
+                     else if (Pec12IsMinus())
+                     {
+                         //modifier la sÃ©lection du menu
+                         SELECTION_MENU = MENU_FREQU;
+                         //ecrire  "*" du LCD pour selectionner la frequence
+                         lcd_gotoxy(1,2);
+                         printf_lcd("*");
+                     }
+                     //Valider le choix
+                     else if (Pec12IsOK())
+                     {  
+                         //modifier la valeur
+                         SELECTION_MENU = MENU_AMPLI_VALEUR;
+                         //ecrire  "?" du LCD pour modifier la valeur
+                         lcd_gotoxy(1,3);
+                         printf_lcd("?");
+                     }
+                 }
+             break;       
+             }
+             // Menu modifier l'amplitude du signal //
+             case MENU_AMPLI_VALEUR:
+             {
+                 //Tester si une touche est active
+                 if(Pec12IsPlus()||Pec12IsMinus())
+                 {
+                     //incrementer la valeur de l'amplitude 
+                     if (Pec12IsPlus())
+                     {
+                         //test si superieur ou egal aÂ  l'amplitude max
+                         if(Val.Amplitude >= 10000 )
+                         {
+                             Val.Amplitude = 0;
+                         }
+                         //sinon incrementer par pas de 100
+                         else
+                         {
+                             Val.Amplitude = Val.Amplitude +100;
+                         } 
+                     }
+                     //decrementer la valeur de l'amplitude 
+                     else
+                     {
+                         //test si inferieur ou egal eÂ  l'amplitude min
+                         if(Val.Amplitude <= 0 )
+                         {
+                             Val.Amplitude = 10000;
+                         }
+                         //sinon decrementer par pas de 100
+                         else
+                         {
+                             Val.Amplitude = Val.Amplitude -100;
+                         }
+                     }
+                     //GESTION AFFICHAGE//
+                     //supprimer les caractère sur la 3ere ligne
+                     lcd_ClearLine(3);
+                     //afficher "?Ampl[mV]"
+                     lcd_gotoxy(1,3);
+                     printf_lcd("?Ampl[mV]");
+                     //afficher valeur
+                     lcd_gotoxy(13,3);
+                     printf_lcd("%3d", Val.Amplitude);
+                 }
+                 //Tester si une touche est active
+                 if(Pec12IsOK()||Pec12IsESC())
+                 {
+                     //si on appuye sur ok
+                     if (Pec12IsOK())
+                     {
+                         //sauvgarder la nouvelle valeur 
+                          pParam->Amplitude = Val.Amplitude;
 
-                    //mettre à jour l'amplitude du signal
-                    GENSIG_UpdateSignal(pParam);
+                         //mettre à jour l'amplitude du signal
+                         GENSIG_UpdateSignal(pParam);
 
-                }
-                //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire                     
-                else 
-                {
-                    //Récuperer la valeur de base
-                    Val.Amplitude = pParam->Amplitude;
-                }
-                //GESTION AFFICHAGE//
-                //supprimer les caractère sur la 2ere ligne
-                lcd_ClearLine(3);
-                //afficher "*Ampl[mV]"
-                lcd_gotoxy(1,3);
-                printf_lcd("*Ampl[mV]"); 
-                //afficher valeur
-                lcd_gotoxy(13,3);
-                printf_lcd("%d", Val.Amplitude);
+                     }
+                     //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire                     
+                     else 
+                     {
+                         //Récuperer la valeur de base
+                         Val.Amplitude = pParam->Amplitude;
+                     }
+                     //GESTION AFFICHAGE//
+                     //supprimer les caractère sur la 2ere ligne
+                     lcd_ClearLine(3);
+                     //afficher "*Ampl[mV]"
+                     lcd_gotoxy(1,3);
+                     printf_lcd("*Ampl[mV]"); 
+                     //afficher valeur
+                     lcd_gotoxy(13,3);
+                     printf_lcd("%d", Val.Amplitude);
 
-                //retourner sur la selection de l'amplitude
-                SELECTION_MENU = MENU_AMPLI;
-            }
+                     //retourner sur la selection de l'amplitude
+                     SELECTION_MENU = MENU_AMPLI;
+                 }
 
-        break;       
-        }
+             break;       
+             }
 
-        // Menu OFFSET //
-        case MENU_OFFSET:
-        {
-            //ecrire sur la 4eme ligne de la premiere colonne "*" du LCD
-            lcd_gotoxy(1,4);
-            printf_lcd("*");
-
-            //Tester si une touche est active
-            if(Pec12IsPlus()||Pec12IsMinus()||Pec12IsOK())
-            {
-                //incrementer choix du menu
-                if (Pec12IsPlus())
-                {
-                    //modifier la sÃ©lection du menu
-                    SELECTION_MENU = MENU_FORME;
-                }
-                //decrementer choix du menu
-                else if (Pec12IsMinus())
-                {
-                    //modifier la sÃ©lection du menu
-                    SELECTION_MENU = MENU_AMPLI;
-                }
-                //Valider le choix
-                else if (Pec12IsOK())
-                {
-                    //modifier la valeur
-                    SELECTION_MENU = MENU_OFFSET_VALEUR;
-                }
-                //effacer "*"
+             // Menu OFFSET //
+             case MENU_OFFSET:
+             {
+                 //effacer "*"
                 lcd_gotoxy( 1, 4);
                 printf_lcd(" ");
-            }
 
-        break;       
+                 //Tester si une touche est active
+                 if(Pec12IsPlus()||Pec12IsMinus()||Pec12IsOK())
+                 {
+                     //incrementer choix du menu
+                     if (Pec12IsPlus())
+                     {
+                         //modifier la sÃ©lection du menu
+                         SELECTION_MENU = MENU_FORME;
+                         //ecrire  "*" du LCD pour selectionner la forme
+                         lcd_gotoxy(1,1);
+                         printf_lcd("*");
+                     }
+                     //decrementer choix du menu
+                     else if (Pec12IsMinus())
+                     {
+                         //modifier la sÃ©lection du menu
+                         SELECTION_MENU = MENU_AMPLI;
+                         //ecrire  "*" du LCD pour selectionner l'ampli
+                         lcd_gotoxy(1,3);
+                         printf_lcd("*");
+                     }
+                     //Valider le choix
+                     else if (Pec12IsOK())
+                     {
+                         //modifier la valeur
+                         SELECTION_MENU = MENU_OFFSET_VALEUR;
+                         //ecrire  "?" du LCD pour modifier la valeur
+                         lcd_gotoxy(1,4);
+                         printf_lcd("?");
+                     }
+                     
+                 }
+
+             break;       
+             }
+             // Menu modifier l'offset du signal //
+             case MENU_OFFSET_VALEUR:
+             {
+                //Tester si une touche est active
+                 if(Pec12IsPlus()||Pec12IsMinus())
+                 {
+
+                     //incrementer la valeur de l'offset 
+                     if (Pec12IsPlus())
+                     {
+                         //test si supperieur ou egal e l'offset max
+                         if(Val.Offset >= 5000 )
+                         {
+                             Val.Offset = (5000);
+                         }
+                         //sinon incrementer par pas de 100
+                         else
+                         {
+                             Val.Offset = (Val.Offset +100);
+                         } 
+                     }
+                     //decrementer la valeur de l'offset
+                     else
+                     {
+                         //test si inferieur ou egal aÂ  l'offset min
+                         if(Val.Offset <= -5000 )
+                         {
+                             Val.Offset = (-5000);
+                         }
+                         //sinon decrementer par pas de 100
+                         else
+                         {
+                             Val.Offset = (Val.Offset -100);
+                         }
+                     }
+                     //GESTION AFFICHAGE//
+                     //supprimer les caractère sur la 4ere ligne
+                     lcd_ClearLine(4);
+                     //afficher "?Offset[mV]"
+                     lcd_gotoxy(1,4);
+                     printf_lcd("?Offset[mV]");
+                     //afficher valeur
+                     lcd_gotoxy(13,4);
+                     printf_lcd("%d", Val.Offset);
+                 }
+                 if(Pec12IsOK()||Pec12IsESC())
+                 {
+                     //si on appuye sur ok
+                     if (Pec12IsOK())
+                     {
+
+                         //sauvgarder la nouvelle valeur 
+                         pParam->Offset = Val.Offset;
+
+                         //mettre à jour l'offset du signal
+                         GENSIG_UpdateSignal(pParam);
+                     }
+                     //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire 
+                     else 
+                     {
+                         //Récuperer la valeur de base
+                         Val.Offset = pParam->Offset;
+                     }
+                     //GESTION AFFICHAGE//
+                     //supprimer les caractère sur la 4ere ligne
+                     lcd_ClearLine(4);
+                     //afficher "*Offset[mV]"
+                     lcd_gotoxy(1,4);
+                     printf_lcd("*Offset[mV]");
+                     //afficher valeur
+                     lcd_gotoxy(13,4);
+                     printf_lcd("%d", Val.Offset);
+
+                     //retourner sur la selection de l'offset
+                     SELECTION_MENU = MENU_OFFSET;
+                }
+             break;       
+            } 
+
         }
-        // Menu modifier l'offset du signal //
-        case MENU_OFFSET_VALEUR:
-        {
-            //afiicher un "?" sur la 4 eme ligne, 1 ere colonne
-            lcd_gotoxy(1,4);
-            printf_lcd("?");
-
-            //Tester si une touche est active
-            if(Pec12IsPlus()||Pec12IsMinus())
-            {
-
-                //incrementer la valeur de l'offset 
-                if (Pec12IsPlus())
-                {
-                    //test si supperieur ou egal e l'offset max
-                    if(Val.Offset >= 5000 )
-                    {
-                        Val.Offset = (5000);
-                    }
-                    //sinon incrementer par pas de 100
-                    else
-                    {
-                        Val.Offset = (Val.Offset +100);
-                    } 
-                }
-                //decrementer la valeur de l'offset
-                else
-                {
-                    //test si inferieur ou egal aÂ  l'offset min
-                    if(Val.Offset <= -5000 )
-                    {
-                        Val.Offset = (-5000);
-                    }
-                    //sinon decrementer par pas de 100
-                    else
-                    {
-                        Val.Offset = (Val.Offset -100);
-                    }
-                }
-                //GESTION AFFICHAGE//
-                //supprimer les caractère sur la 4ere ligne
-                lcd_ClearLine(4);
-                //afficher "?Offset[mV]"
-                lcd_gotoxy(1,4);
-                printf_lcd("?Offset[mV]");
-                //afficher valeur
-                lcd_gotoxy(13,4);
-                printf_lcd("%d", Val.Offset);
-            }
-            if(Pec12IsOK()||Pec12IsESC())
-            {
-                //si on appuye sur ok
-                if (Pec12IsOK())
-                {
-
-                    //sauvgarder la nouvelle valeur 
-                    pParam->Offset = Val.Offset;
-
-                    //mettre à jour l'offset du signal
-                    GENSIG_UpdateSignal(pParam);
-                }
-                //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire 
-                else 
-                {
-                    //Récuperer la valeur de base
-                    Val.Offset = pParam->Offset;
-                }
-                //GESTION AFFICHAGE//
-                //supprimer les caractère sur la 4ere ligne
-                lcd_ClearLine(4);
-                //afficher "*Offset[mV]"
-                lcd_gotoxy(1,4);
-                printf_lcd("*Offset[mV]");
-                //afficher valeur
-                lcd_gotoxy(13,4);
-                printf_lcd("%d", Val.Offset);
-
-                //retourner sur la selection de l'offset
-                SELECTION_MENU = MENU_OFFSET;
-            }
-        break;       
-        } 
-    
+        
     }
 //mettre à 0 les valeurs du PEG12
     Pec12ClearOK();
