@@ -432,7 +432,7 @@ void APP_Tasks (void )
 {
     /* Update the application state machine based
      * on the current state */
-    int i; 
+ //   int i; 
     int j;
     
     switch(appData.state)
@@ -486,6 +486,15 @@ void APP_Tasks (void )
                 USB_DEVICE_CDC_Read (USB_DEVICE_CDC_INDEX_0,
                         &appData.readTransferHandle, appData.readBuffer,
                         APP_READ_BUFFER_SIZE);
+                
+                
+                //APP_DisplayChar(appData.readBuffer[0]);
+                for (j = 0; j < 30; j++)
+                {
+                    appData.newStringReceived[j] = appData.readBuffer[j];
+                }
+                
+                
                 
                 if(appData.readTransferHandle == USB_DEVICE_CDC_TRANSFER_HANDLE_INVALID)
                 {
@@ -541,19 +550,15 @@ void APP_Tasks (void )
             else
             {
                 /* Else echo each received character by adding 1 */
-                for(i=0; i<appData.numBytesRead; i++)
+                /*for(i=0; i<appData.numBytesRead; i++)
                 {
                     if((appData.readBuffer[i] != 0x0A) && (appData.readBuffer[i] != 0x0D))
                     {
                         appData.readBuffer[i] = appData.readBuffer[i];
                     }
-                }
+                }*/
                 
-                //APP_DisplayChar(appData.readBuffer[0]);
-                for (j = 0; j < 30; j++)
-                {
-                    appData.newStringReceived[j] = appData.readBuffer[j];
-                }
+                
                 
                 USB_DEVICE_CDC_Write(USB_DEVICE_CDC_INDEX_0,
                         &appData.writeTransferHandle,

@@ -23,7 +23,11 @@ typedef struct {
       int16_t Offset;
 
 } S_No_save;
-bool Flag_Save;
+
+typedef struct {
+            bool SAVE : 1;             // événement incrément
+            bool REFRESH  : 1;             // événement décrément
+} S_Flag;
 
 ////////////*prototype de fonction*//////////
 // Initialisation du menu et des parametres
@@ -43,7 +47,18 @@ void Clear_LCD();
 void Menu_GESTION_PEG12(S_ParamGen *pParam);      
 
 //flag Save
-bool  ToggleFlag_Save(void);
+bool  Flag_Save(void);
+
+void FlagSave_OK(void);
+
+void FlagSave_Clear(void);
+
+bool  Flag_RefreshLCD(void);
+
+void FlagRefreshLCD_Clear(void);
+
+void MAJ_Valeur (S_ParamGen *pParam);
+
 
 #endif
 

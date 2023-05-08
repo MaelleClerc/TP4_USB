@@ -34,50 +34,57 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
     int16_t Frequence_recue = 0;
     int16_t Amplitude_recue = 0;
     int16_t Offset_recu = 0;
-    
-    // Traduction de la forme du signal
-    switch (appData.newStringReceived[3])
-    {
-        case 'T':
-            
-            pParam->Forme = SignalTriangle;
-            
-            break;
-            
-        case 'S':
-            
-            pParam->Forme = SignalSinus;
-            
-            break;
-            
-        case 'C':
-            
-            pParam->Forme = SignalCarre;
-                
-            break;
-            
-        case 'D':
-            
-            pParam->Forme = SignalDentDeScie;
-            
-            break;
+
+ 
+   if (USBReadBuffer[0] == '!')
+   {
+        // Traduction de la forme du signal
+        switch (USBReadBuffer[3])
+        {
+            case 'T':
+
+                pParam->Forme = SignalTriangle;
+
+                break;
+
+            case 'S':
+
+                pParam->Forme = SignalSinus;
+
+                break;
+
+            case 'C':
+
+                pParam->Forme = SignalCarre;
+
+                break;
+
+            case 'D':
+
+                pParam->Forme = SignalDentDeScie;
+
+                break;
+        }
+
+        //if(appData.newStringReceived[0])
+        // Traduction de la frequence
+        Frequence_recue = USBReadBuffer[6];
+
+        // Traduction de l'amplitude
+        Amplitude_recue = USBReadBuffer[12];
+
+        // Traduction de l'offset
+        Offset_recu = USBReadBuffer[19];
+
+        // Mise a jour des parametres de pParam
+        pParam->Frequence = Frequence_recue;
+        pParam->Amplitude = Amplitude_recue;
+        pParam->Offset = Offset_recu;
+
+        //*SaveTodo = atoi(&appData.newStringReceived[26]);
     }
+    return SaveTodo; 
     
-    // Traduction de la frequence
-    Frequence_recue = atoi(&appData.newStringReceived[6]);
-    
-    // Traduction de l'amplitude
-    Amplitude_recue = atoi(&appData.newStringReceived[12]);
-    
-    // Traduction de l'offset
-    Offset_recu = atoi(&appData.newStringReceived[19]);
-    
-    // Mise a jour des parametres de pParam
-    pParam->Frequence = Frequence_recue;
-    pParam->Amplitude = Amplitude_recue;
-    pParam->Offset = Offset_recu;
-    
-    return atoi(&appData.newStringReceived[26]); 
 } // GetMessage
 
 
@@ -91,13 +98,65 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
 
 void SendMessage(int8_t *USBSendBuffer, S_ParamGen *pParam, bool Saved )
 {
-   // Code pour envoyer les données à l'EEprom en utilisant SPI
-  // Ici, on suppose que les données sont stockées dans un tableau nommé "eepromData"
-  // et que la fonction SPITransfer() est utilisée pour la communication SPI
-  // On commence par sélectionner le circuit d'EEprom en abaissant sa broche de sélection
-  //digitalWrite(EEPROM_CS_PIN, LOW);
-  //SPITransfer(eepromData);
-  // Puis on désélectionne le circuit d'EEprom en remontant sa broche de sélection
-  //digitalWrite(EEPROM_CS_PIN, HIGH);
+    USBSendBuffer[0] = '!';
+    USBSendBuffer[1] = 'S';
+    USBSendBuffer[2] = '=';
+    switch (pParam->Forme)
+    {
+        case SignalTriangle:
+            
+            USBSendBuffer[3] = 'T';
+            
+            break;
+            
+        case SignalSinus:
+            
+            USBSendBuffer[3] = 'S';
+            
+            break;
+            
+        case SignalCarre:
+            
+            USBSendBuffer[3] = 'C';
+                
+            break;
+            
+        case SignalDentDeScie:
+            
+            USBSendBuffer[3] = 'D';
+            
+            break;
+    }
+    USBSendBuffer[4] = 'F';
+    USBSendBuffer[5] = '=';
+    USBSendBuffer[6] = (char) (pParam->Frequence / 1000);
+    USBSendBuffer[7] = (char) ((pParam->Frequence / 100) % 10);
+    USBSendBuffer[8] = (char) ((pParam->Frequence / 10) % 100);
+    USBSendBuffer[9] = (char) (pParam->Frequence % 1000);
+    USBSendBuffer[10] = 'A';
+    USBSendBuffer[11] = '=';
+    USBSendBuffer[12] = (char) (pParam->Amplitude / 10000);
+    USBSendBuffer[13] = (char) ((pParam->Amplitude / 1000) % 10);
+    USBSendBuffer[14] = (char) ((pParam->Amplitude / 100) % 100);
+    USBSendBuffer[15] = (char) ((pParam->Amplitude / 10) % 1000);
+    USBSendBuffer[16] = (char) (pParam->Amplitude % 10000);
+    USBSendBuffer[17] = 'O';
+    USBSendBuffer[18] = '=';
+    if (pParam->Offset >= 0)
+    {
+        USBSendBuffer[19] = '+';
+    }
+    else
+    {
+        USBSendBuffer[19] = '-';
+    }
+    USBSendBuffer[20] = (char) (pParam->Offset / 1000);
+    USBSendBuffer[21] = (char) ((pParam->Offset / 100) % 10);
+    USBSendBuffer[22] = (char) ((pParam->Offset / 10) % 100);
+    USBSendBuffer[23] = (char) (pParam->Offset % 1000);
+    USBSendBuffer[24] = 'W';
+    USBSendBuffer[25] = 'P';
+    USBSendBuffer[26] = (char) Saved;
+    USBSendBuffer[27] = '#';
 } // SendMessage
 
