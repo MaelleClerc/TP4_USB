@@ -20,17 +20,23 @@
 
 #define TIMER_LCD_SAUVGARDE 100
 //#define TIMER_S9_SAVE 199
-#define AFK_TIME 500 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
+#define AFK_TIME 499 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
+#define TIMER_LCD_SAUVGARDE 100
+#define TIMER_S9_SAVE 199
 
 E_MENU SELECTION_MENU;
 S_No_save Val;
 // Structure pour les traitement du Pec12
 S_Pec12_Descriptor Pec12;
-//S_S9_Descriptor S9;
+S_S9_Descriptor S9;
 
 //flag
 S_Flag FLAG;
 bool OLD_Local ;
+
+//initailisation de la varible pour mettre à jour ou non l'affichage
+uint8_t MAJ_LCD_SAVE = 0;
+uint8_t MAJ_LCD_Menu = 0;
 
 //déclaration constate tableau
 const char tb_MenuFormes [4] [21] = { "Sinus", "Triangle", "DentDeScie", "Carre" };
@@ -97,6 +103,10 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 { 
     //initalisation des variable
     uint16_t static Compt_SAVE = 0;
+    //timer s9
+    uint8_t static Timer_S9 = 0;   
+    //Timer affichagetemps affichage
+    uint8_t static Timer_LCD = 0;
     
     
     if (Local == 0)
@@ -136,21 +146,72 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
     }                        
     else
     {
-        //mettre à jour l'affichage si le menu de sauvegarde a été activé
-        if (Local != OLD_Local)
+        //ENREGSTRER DANS LA FLASH//
+        if (S9.OK == 0)
         {
-            //clear LCD et allumer le LCD
-            Clear_LCD();
-            //arreter le compteur
-            Pec12ClearInactivity();
-            //menu principale
-            Menu_interface(pParam);
-            
-            //initaliser premiemiere parametre aÂ  pointer dans le menu
-            SELECTION_MENU = MENU_FORME;  
+            if (Timer_S9 == 0)
+            {
+                //mettre à jour l'affichage si le menu de sauvegarde a été activé
+                if (MAJ_LCD_Menu == 0)
+                {
+
+                    /*gestion de l'affichage avec le PEG12*/
+                    Menu_GESTION_PEG12(pParam);    
+                }
+                else 
+                {
+                    //Supprimer l'affichage sur le LCD
+                    Clear_LCD();
+                    //menu principale
+                    Menu_interface(pParam);
+                    /*gestion de l'affichage avec le PEG12*/
+                    Menu_GESTION_PEG12(pParam);  
+                    //menu mis à jour
+                    MAJ_LCD_Menu = 0;
+
+                }
+            }
+            //si le maintiens du bouton S9 >= à  2 sec
+            else if (Timer_S9 >= TIMER_S9_SAVE)
+            {          
+                /*Afficher sauvgade OK*/
+                Sauvgarde_OK();
+                //enregistrer les datas dans la flash
+                NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes 
+
+                //activer timer pour afficher durant env 2 sec l'affichage okey
+                Timer_LCD ++;
+                if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
+                {
+                    //remettre à 0 les timer
+                    Timer_S9 = 0;
+                    Timer_LCD = 0;
+                }
+            }
+
+            else if ((Timer_S9 < TIMER_S9_SAVE)&&(Timer_S9 > 0))
+            {
+                /*Afficher sauvgade Anuulee*/
+                Sauvgarde_ANNULE();
+
+                //activer timer pour afficher durant env 2 sec l'affichage annulee
+                Timer_LCD ++;
+                if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
+                {
+                    //remettre à 0 les timer
+                    Timer_S9 = 0;
+                    Timer_LCD = 0;
+                }           
+            }               
+        }                      
+
+        else
+        {
+            //afficher le menu sauvgarde
+            Menu_Sauvgarde();         
+            //incrémenter le timer
+            Timer_S9 ++;
         }
-        /*gestion de l'affichage avec le PEG12*/
-        Menu_GESTION_PEG12(pParam); 
     }
     OLD_Local = Local;
 }    
@@ -209,7 +270,60 @@ void MAJ_Valeur (S_ParamGen *pParam)
     lcd_gotoxy(13,4);
     printf_lcd("%d",  pParam->Offset);
 }
+/*Design menu de sauvgade*/
+void Menu_Sauvgarde()
+{
+    if(MAJ_LCD_SAVE == 0)
+    {
+        //clear LCD
+        Clear_LCD();
+        //ecrire sur l'affichage
+        lcd_gotoxy(6,2);    
+        printf_lcd("Sauvegarde?"); //ligne 2
+        lcd_gotoxy(5,3);    
+        printf_lcd("(appui long)"); //ligne 3
+    }
+    //ne plus remettre à jour l'affichage save
+    MAJ_LCD_SAVE = 1;
+}
 
+/*Design menu de sauvgade OK*/
+void Sauvgarde_OK()
+{
+    if(MAJ_LCD_SAVE == 1)
+    {
+        //clear LCD
+        Clear_LCD();
+        //ecrire sur l'affichage
+        lcd_gotoxy(6,2);    
+        printf_lcd("Sauvegarde"); //ligne 2
+        lcd_gotoxy(9,3);    
+        printf_lcd("OK!"); //ligne 3 
+    }
+    //ne plus remettre à jour l'affichage save OK
+    MAJ_LCD_SAVE = 0;
+    //mettre à jour le LCD
+    MAJ_LCD_Menu = 1;    
+}
+
+/*Design menu de sauvgade ANNULER*/
+void Sauvgarde_ANNULE()
+{
+    if(MAJ_LCD_SAVE == 1)
+    {
+        //clear LCD
+        Clear_LCD();
+        //ecrire sur l'affichage    
+        lcd_gotoxy(6,2);    
+        printf_lcd("Sauvegarde"); //ligne 2
+        lcd_gotoxy(6,3);    
+        printf_lcd("ANNULEE!"); //ligne 3 
+    }
+    //ne plus remettre à jour l'affichage save OK
+    MAJ_LCD_SAVE = 0;
+    //mettre à jour le LCD
+    MAJ_LCD_Menu = 1; 
+}
 
 /*Supprimer toutes les ligne du LCD*/
 void Clear_LCD()
@@ -248,7 +362,7 @@ void FlagRefreshLCD_Clear(void)
 /*gestion de l'affichage avec le PEG12*/
 void Menu_GESTION_PEG12(S_ParamGen *pParam)
 {
-    if((Pec12IsPlus() ==0) && (Pec12IsMinus() == 0) && (Pec12IsOK() == 0)&& (Pec12IsESC() == 0) /*&& (S9.OK == 0)*/)
+    if((Pec12IsPlus() ==0) && (Pec12IsMinus() == 0) && (Pec12IsOK() == 0)&& (Pec12IsESC() == 0) && (S9.OK == 0))
     {
        //Test durÃ©e d'inactivitÃ© > 5sec
        if(Pec12.InactivityDuration >= AFK_TIME)

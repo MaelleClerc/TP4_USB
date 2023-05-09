@@ -64,6 +64,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "Mc32gestSpiDac.h"
 #include "Mc32gest_SerComm.h"
 #include "app_USB.h"
+#include "Mc32gestI2cSeeprom.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -167,6 +168,9 @@ void APP_GEN_Tasks ( void )
             
             // Init SPI DAC
             SPI_InitLTC2604();  
+            
+            // Initialisation de l'I2C
+            I2C_InitMCP79411();
 
             // Initialisation du generateur
             GENSIG_Initialize(&LocalParamGen);
