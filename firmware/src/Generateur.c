@@ -18,6 +18,7 @@
 #include "driver/tmr/drv_tmr_static.h"
 #include <stdint.h>
 #include <math.h>
+#include "Mc32gestI2cSeeprom.h"
 
 // T.P. 2016 100 echantillons
 #define MAX_ECH 100
@@ -30,7 +31,7 @@ int32_t tb_Amplitude[MAX_ECH];
 void  GENSIG_Initialize(S_ParamGen *pParam)
 {           
     //Recuperation des datas sauvegardées au demarrage precedent
-    NVM_ReadBlock((uint32_t*) pParam , 14); //Taille datas = taille structutre = 14 bytes
+    I2C_ReadSEEPROM(pParam);
     
     //Test si match de la valeur Magic
     if (pParam->Magic == MAGIC)
@@ -45,7 +46,7 @@ void  GENSIG_Initialize(S_ParamGen *pParam)
         lcd_gotoxy(1,4);
         printf_lcd("Datas Default");
         //Set les valeurs aux valeurs par defaut
-        pParam->Magic = MAGIC;
+        pParam->Magic = 0;
         pParam->Amplitude = 10000;
         pParam->Forme = 2;
         pParam->Frequence = 100;

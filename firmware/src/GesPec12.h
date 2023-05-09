@@ -47,6 +47,7 @@ typedef struct {
 typedef struct {
 
             uint8_t OK  : 1;              // événement action OK
+            uint16_t PressDuration;   // Pour durée pression du P.B.
 
 } S_S9_Descriptor;
 
@@ -82,7 +83,7 @@ typedef struct {
 // A:                     |_____________________|                    
 //     __________                      ________________
 // B:            |____________________|
-void ScanPec12 (bool ValA, bool ValB, bool ValPB);
+void ScanPec12 (bool ValA, bool ValB, bool ValPB, bool ValS9);
 
 void Pec12Init (void);
 

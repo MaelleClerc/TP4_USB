@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
+#include "Mc32gestI2cSeeprom.h"
 #include "MenuGen.h"
 #include "Generateur.h"
 #include "Mc32NVMUtil.h"
@@ -176,8 +176,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
             {          
                 /*Afficher sauvgade OK*/
                 Sauvgarde_OK();
-                //enregistrer les datas dans la flash
-                NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes 
+                
 
                 //activer timer pour afficher durant env 2 sec l'affichage okey
                 Timer_LCD ++;
@@ -186,6 +185,9 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     //remettre à 0 les timer
                     Timer_S9 = 0;
                     Timer_LCD = 0;
+                    //enregistrer les datas dans la flash
+                    I2C_WriteSEEPROM(pParam);
+                    pParam->Magic = MAGIC;
                 }
             }
 

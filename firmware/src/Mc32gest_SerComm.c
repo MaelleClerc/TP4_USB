@@ -96,64 +96,69 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
 
 
 
-void SendMessage(int8_t *USBSendBuffer, S_ParamGen *pParam, bool Saved )
+void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer, S_ParamGen *pParam, bool Saved )
 {
-    USBSendBuffer[0] = '!';
-    USBSendBuffer[1] = 'S';
-    USBSendBuffer[2] = '=';
-    switch (pParam->Forme)
+    int i;
+    for(i=0; i < 24; i++)
     {
-        case SignalTriangle:
-            
-            USBSendBuffer[3] = 'T';
-            
-            break;
-            
-        case SignalSinus:
-            
-            USBSendBuffer[3] = 'S';
-            
-            break;
-            
-        case SignalCarre:
-            
-            USBSendBuffer[3] = 'C';
-                
-            break;
-            
-        case SignalDentDeScie:
-            
-            USBSendBuffer[3] = 'D';
-            
-            break;
+      USBSendBuffer[i] = USBReadBuffer[i];
     }
-    USBSendBuffer[4] = 'F';
-    USBSendBuffer[5] = '=';
-    USBSendBuffer[6] = (char) (pParam->Frequence / 1000);
-    USBSendBuffer[7] = (char) ((pParam->Frequence / 100) % 10);
-    USBSendBuffer[8] = (char) ((pParam->Frequence / 10) % 100);
-    USBSendBuffer[9] = (char) (pParam->Frequence % 1000);
-    USBSendBuffer[10] = 'A';
-    USBSendBuffer[11] = '=';
-    USBSendBuffer[12] = (char) (pParam->Amplitude / 10000);
-    USBSendBuffer[13] = (char) ((pParam->Amplitude / 1000) % 10);
-    USBSendBuffer[14] = (char) ((pParam->Amplitude / 100) % 100);
-    USBSendBuffer[15] = (char) ((pParam->Amplitude / 10) % 1000);
-    USBSendBuffer[16] = (char) (pParam->Amplitude % 10000);
-    USBSendBuffer[17] = 'O';
-    USBSendBuffer[18] = '=';
-    if (pParam->Offset >= 0)
-    {
-        USBSendBuffer[19] = '+';
-    }
-    else
-    {
-        USBSendBuffer[19] = '-';
-    }
-    USBSendBuffer[20] = (char) (pParam->Offset / 1000);
-    USBSendBuffer[21] = (char) ((pParam->Offset / 100) % 10);
-    USBSendBuffer[22] = (char) ((pParam->Offset / 10) % 100);
-    USBSendBuffer[23] = (char) (pParam->Offset % 1000);
+//    USBSendBuffer[0] = '!';
+//    USBSendBuffer[1] = 'S';
+//    USBSendBuffer[2] = '=';
+//    switch (pParam->Forme)
+//    {
+//        case SignalTriangle:
+//            
+//            USBSendBuffer[3] = 'T';
+//            
+//            break;
+//            
+//        case SignalSinus:
+//            
+//            USBSendBuffer[3] = 'S';
+//            
+//            break;
+//            
+//        case SignalCarre:
+//            
+//            USBSendBuffer[3] = 'C';
+//                
+//            break;
+//            
+//        case SignalDentDeScie:
+//            
+//            USBSendBuffer[3] = 'D';
+//            
+//            break;
+//    }
+//    USBSendBuffer[4] = 'F';
+//    USBSendBuffer[5] = '=';
+//    USBSendBuffer[6] = (char) (pParam->Frequence / 1000);
+//    USBSendBuffer[7] = (char) ((pParam->Frequence / 100) % 10);
+//    USBSendBuffer[8] = (char) ((pParam->Frequence / 10) % 100);
+//    USBSendBuffer[9] = (char) (pParam->Frequence % 1000);
+//    USBSendBuffer[10] = 'A';
+//    USBSendBuffer[11] = '=';
+//    USBSendBuffer[12] = (char) (pParam->Amplitude / 10000);
+//    USBSendBuffer[13] = (char) ((pParam->Amplitude / 1000) % 10);
+//    USBSendBuffer[14] = (char) ((pParam->Amplitude / 100) % 100);
+//    USBSendBuffer[15] = (char) ((pParam->Amplitude / 10) % 1000);
+//    USBSendBuffer[16] = (char) (pParam->Amplitude % 10000);
+//    USBSendBuffer[17] = 'O';
+//    USBSendBuffer[18] = '=';
+//    if (pParam->Offset >= 0)
+//    {
+//        USBSendBuffer[19] = '+';
+//    }
+//    else
+//    {
+//        USBSendBuffer[19] = '-';
+//    }
+//    USBSendBuffer[20] = (char) (pParam->Offset / 1000);
+//    USBSendBuffer[21] = (char) ((pParam->Offset / 100) % 10);
+//    USBSendBuffer[22] = (char) ((pParam->Offset / 10) % 100);
+//    USBSendBuffer[23] = (char) (pParam->Offset % 1000);
     USBSendBuffer[24] = 'W';
     USBSendBuffer[25] = 'P';
     USBSendBuffer[26] = (char) Saved;

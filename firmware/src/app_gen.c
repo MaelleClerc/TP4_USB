@@ -170,7 +170,7 @@ void APP_GEN_Tasks ( void )
             SPI_InitLTC2604();  
             
             // Initialisation de l'I2C
-            I2C_InitMCP79411();
+            I2C_InitMCP79411();
 
             // Initialisation du generateur
             GENSIG_Initialize(&LocalParamGen);

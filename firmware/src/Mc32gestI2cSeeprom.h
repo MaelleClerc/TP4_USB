@@ -12,13 +12,13 @@
 /*--------------------------------------------------------*/
 
 
-
+#include "DefMenuGen.h"
 #include <stdint.h>
 
 
 // prototypes des fonctions
 void I2C_InitMCP79411(void);
-void I2C_ReadSEEPROM(void *DstData);
-void I2C_WriteSEEPROM(void *SrcData);
+void I2C_ReadSEEPROM(S_ParamGen *DstData);
+void I2C_WriteSEEPROM(S_ParamGen *SrcData);
 
 #endif
