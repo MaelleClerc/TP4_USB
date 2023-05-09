@@ -192,7 +192,7 @@ void ScanPec12 (bool ValA, bool ValB, bool ValPB)
            //====================//
           //  Gestion BoutonS9  //
          //====================//
-    /*
+    
     if(S_OK == 0)
     {
         S9.OK = 1;
@@ -201,7 +201,7 @@ void ScanPec12 (bool ValA, bool ValB, bool ValPB)
     {
         //Affacer la valleur de S9
         S9.OK = 0;
-    }*/
+    }
     
             //====================//
             // Gestion inactivite //

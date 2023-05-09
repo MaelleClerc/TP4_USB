@@ -38,6 +38,12 @@ void Menu_interface(S_ParamGen *pParam);
 void MENU_Execute(S_ParamGen *pParam, bool Local);
 /*Design menu de sauvgade*/
 void Menu_Save();
+/*Design menu de sauvgade*/
+void Menu_Sauvgarde();
+/*Design menu de sauvgade OK*/
+void Sauvgarde_OK();
+/*Design menu de sauvgade ANNULER*/
+void Sauvgarde_ANNULE();
 
 //afficge le #devant les 4 lignes
 void Pt_AffichageRemote();
