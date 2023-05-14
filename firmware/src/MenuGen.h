@@ -27,7 +27,10 @@ typedef struct {
 typedef struct {
             bool SAVE : 1;             // événement incrément
             bool REFRESH  : 1;             // événement décrément
+            bool REMOTE : 1;
 } S_Flag;
+
+
 
 ////////////*prototype de fonction*//////////
 // Initialisation du menu et des parametres
@@ -59,9 +62,15 @@ void FlagSave_OK(void);
 
 void FlagSave_Clear(void);
 
+void Flag_RefreshLCD_OK(void);
+
 bool  Flag_RefreshLCD(void);
 
 void FlagRefreshLCD_Clear(void);
+
+bool  Flag_RefreshLCDRemote(void);
+
+void FlagRefreshLCDRemote_Clear(void);
 
 void MAJ_Valeur (S_ParamGen *pParam);
 

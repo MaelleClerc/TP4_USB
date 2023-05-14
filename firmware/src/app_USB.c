@@ -54,7 +54,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 #include "app_USB.h"
-
+#include "Mc32gest_SerComm.h"
+#include "MenuGen.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -432,7 +433,7 @@ void APP_Tasks (void )
 {
     /* Update the application state machine based
      * on the current state */
- //   int i; 
+   int i; 
     int j;
     
     switch(appData.state)
@@ -550,13 +551,14 @@ void APP_Tasks (void )
             else
             {
                 /* Else echo each received character by adding 1 */
-                /*for(i=0; i<appData.numBytesRead; i++)
+                for(i=0; i<appData.numBytesRead; i++)
                 {
                     if((appData.readBuffer[i] != 0x0A) && (appData.readBuffer[i] != 0x0D))
                     {
-                        appData.readBuffer[i] = appData.readBuffer[i];
+                        SendMessage((int8_t *)appData.readBuffer,(int8_t *)appData.readBuffer, Flag_Save() );
+                        //appData.readBuffer[i] = appData.readBuffer[i];
                     }
-                }*/
+                }
                 
                 
                 
