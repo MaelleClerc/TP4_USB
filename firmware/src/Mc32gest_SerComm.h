@@ -21,6 +21,6 @@
 /*--------------------------------------------------------*/
 
 void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer, S_ParamGen *pParam, bool Saved);
-bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo);
+bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam );
 
 #endif

@@ -196,25 +196,30 @@ void ScanPec12 (bool ValA, bool ValB, bool ValPB, bool ValS9)
 
     if(DebounceIsPressed(&DescrS9)) //appui
     {
-        DebounceClearPressed(&DescrS9);
-        S9.PressDuration = 0;
+        S9.PressDuration++;
+        DebounceClearPressed(&DescrS9);        
+        S9.OK = 1;   //appui bref
+        lcd_bl_on(); 
+        Pec12ClearInactivity();
     } 
     else if(DebounceGetInput(&DescrS9) == 0) //maintien appuyé
     {
         S9.PressDuration++;
+        S9.OK = 1;   //appui bref
     }
     else if (DebounceIsReleased(&DescrS9))//relachement
     {
         DebounceClearReleased(&DescrS9);
         if (S9.PressDuration >= 2000)
         {
-            S9.OK = 1;   //appui bref
+            S9.SAVE = 1;   //appui bref
         }
             
         else
         {
-            S9.OK = 0;  //appui long  
+            S9.SAVE = 0;  //appui long  
         }
+        S9.OK = 0;  //appui long
     }
     
             //====================//

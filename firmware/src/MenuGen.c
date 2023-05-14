@@ -17,6 +17,7 @@
 #include "Mc32DriverLcd.h"
 #include "GesPec12.h"
 #include "bsp.h"
+#include "Mc32gestI2cSeeprom.h"
 
 #define TIMER_LCD_SAUVGARDE 100
 //#define TIMER_S9_SAVE 199
@@ -102,9 +103,7 @@ void Menu_interface(S_ParamGen *pParam)
 void MENU_Execute(S_ParamGen *pParam, bool Local)
 { 
     //initalisation des variable
-    uint16_t static Compt_SAVE = 0;
-    //timer s9
-    uint8_t static Timer_S9 = 0;   
+    uint16_t static Compt_SAVE = 0;  
     //Timer affichagetemps affichage
     uint8_t static Timer_LCD = 0;
     
@@ -117,7 +116,9 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
             if ((Flag_RefreshLCD())&&(TIMER_LCD_SAUVGARDE < Compt_SAVE))
             {
                 //enregistrer les datas dans la flash
-                NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes 
+                //NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes
+                pParam->Magic = MAGIC;
+                I2C_ReadSEEPROM(pParam);
                 //lire et décodé        
                 Menu_interface(pParam);
                 //ajouter les # aux début des 24 ligne
@@ -139,17 +140,19 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
             }
             else
             {
+                Clear_LCD();
+                 
                 //mettre à jour sellement les valeurs
-                MAJ_Valeur (pParam);
+                Menu_interface(pParam);
             }            
         }                
     }                        
     else
     {
-        //ENREGSTRER DANS LA FLASH//
+        //ENREGSTRER DANS LA EEPROM//
         if (S9.OK == 0)
         {
-            if (Timer_S9 == 0)
+            if (S9.PressDuration == 0)
             {
                 //mettre à jour l'affichage si le menu de sauvegarde a été activé
                 if (MAJ_LCD_Menu == 0)
@@ -172,7 +175,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 }
             }
             //si le maintiens du bouton S9 >= à  2 sec
-            else if (Timer_S9 >= TIMER_S9_SAVE)
+            else if ((S9.SAVE == 1)&&(S9.PressDuration > 0))
             {          
                 /*Afficher sauvgade OK*/
                 Sauvgarde_OK();
@@ -183,15 +186,17 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
                 {
                     //remettre à 0 les timer
-                    Timer_S9 = 0;
+                    S9.SAVE = 0;
+                    S9.PressDuration = 0;
                     Timer_LCD = 0;
                     //enregistrer les datas dans la flash
-                    I2C_WriteSEEPROM(pParam);
                     pParam->Magic = MAGIC;
+                    I2C_WriteSEEPROM(pParam);
+                    
                 }
             }
 
-            else if ((Timer_S9 < TIMER_S9_SAVE)&&(Timer_S9 > 0))
+            else if ((S9.SAVE == 0)&&(S9.PressDuration > 0))
             {
                 /*Afficher sauvgade Anuulee*/
                 Sauvgarde_ANNULE();
@@ -201,7 +206,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
                 {
                     //remettre à 0 les timer
-                    Timer_S9 = 0;
+                    S9.PressDuration = 0;
                     Timer_LCD = 0;
                 }           
             }               
@@ -211,8 +216,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
         {
             //afficher le menu sauvgarde
             Menu_Sauvgarde();         
-            //incrémenter le timer
-            Timer_S9 ++;
+            
         }
     }
     OLD_Local = Local;

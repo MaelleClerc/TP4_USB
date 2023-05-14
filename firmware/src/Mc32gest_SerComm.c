@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "DefMenuGen.h"
+#include <stdbool.h>
 
 APP_DATA appData;
 
@@ -22,7 +23,7 @@ APP_DATA appData;
 //  !S=PF=2000A=10000O=-5000D=100W=1#
 
 
-bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
+bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
 {
     // Code pour récupérer les données de l'USB en utilisant SPI
     // Ici, on suppose que les données sont stockées dans un tableau nommé "usbData"
@@ -34,7 +35,7 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
     int16_t Frequence_recue = 0;
     int16_t Amplitude_recue = 0;
     int16_t Offset_recu = 0;
-
+    bool SaveTodo = 0;
  
    if (USBReadBuffer[0] == '!')
    {
@@ -68,20 +69,24 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
 
         //if(appData.newStringReceived[0])
         // Traduction de la frequence
-        Frequence_recue = USBReadBuffer[6];
+        Frequence_recue = atoi(&appData.newStringReceived[6]);
+        //Frequence_recue = USBReadBuffer[6];
 
         // Traduction de l'amplitude
-        Amplitude_recue = USBReadBuffer[12];
+        //Amplitude_recue = USBReadBuffer[12];
+        Amplitude_recue = atoi(&appData.newStringReceived[12]);
 
         // Traduction de l'offset
-        Offset_recu = USBReadBuffer[19];
+        Offset_recu = atoi(&appData.newStringReceived[19]);
 
         // Mise a jour des parametres de pParam
         pParam->Frequence = Frequence_recue;
         pParam->Amplitude = Amplitude_recue;
         pParam->Offset = Offset_recu;
-
-        //*SaveTodo = atoi(&appData.newStringReceived[26]);
+        
+        SaveTodo = atoi(&appData.newStringReceived[26]);
+        
+        
     }
     return SaveTodo; 
     
@@ -96,7 +101,7 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam, bool *SaveTodo)
 
 
 
-void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer, S_ParamGen *pParam, bool Saved )
+void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer, S_ParamGen *pParam, bool Saved)
 {
     int i;
     for(i=0; i < 24; i++)

@@ -48,6 +48,7 @@ typedef struct {
 
             uint8_t OK  : 1;              // événement action OK
             uint16_t PressDuration;   // Pour durée pression du P.B.
+            uint8_t SAVE : 1;
 
 } S_S9_Descriptor;
 
