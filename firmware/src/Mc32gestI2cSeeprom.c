@@ -16,6 +16,7 @@
 
 #include "Mc32gestI2cSeeprom.h"
 #include "Mc32_I2cUtilCCS.h"
+#include "DefMenuGen.h"
 #include <stdbool.h>  // <cstdbool> en C++
 
 // Définition pour MCP79411
@@ -42,38 +43,46 @@ void I2C_InitMCP79411(void)
 } //end I2C_InitMCP79411
 
 // Ecriture d'un bloc dans l'EEPROM du MCP79411 
-void I2C_WriteSEEPROM(void *SrcData)
+void I2C_WriteSEEPROM(S_ParamGen *SrcData)
 {
     int i;
+    uint8_t *pt_charStruct; 
     static uint16_t NbBytes = 14;
+    
+    //pointeur sur la structure // 
+    pt_charStruct = (uint8_t *)SrcData;
    
     // Ecriture
     i2c_start();
-    i2c_write(MCP79411_EEPROM_W);  // Adresse de MPC79411 + Ecriture
+    i2c_write(MCP79411_EEPROM_W);// Adresse de MPC79411 + Ecriture
     for(i = 0; i < NbBytes; i++)
     {
-        i2c_write(SrcData);
-        SrcData++;
+        i2c_write(*pt_charStruct);
+        pt_charStruct++; 
     }
 
     i2c_stop();
 } // end I2C_WriteSEEPROM
 
 // Lecture d'un bloc dans l'EEPROM du MCP79411
-void I2C_ReadSEEPROM(void *DstData)
+void I2C_ReadSEEPROM(S_ParamGen *DstData)
 {
     int i;
     static uint16_t NbBytes = 14;
+    uint8_t *pt_charStruct; 
    // Lecture
-// Ecriture
+
     i2c_start();
+    //pointeur sur la structure // 
+    pt_charStruct = (uint8_t *)DstData;
+    
     i2c_write(MCP79411_EEPROM_R); // Adresse de MPC79411 + Ecriture
     for(i = 0; i < NbBytes; i++)
     {
-        i2c_write(DstData);
-        DstData++;
+        *pt_charStruct = i2c_read(0);
+        pt_charStruct++;
     }
-
+    
     i2c_stop();
 
     

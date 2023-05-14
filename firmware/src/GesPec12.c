@@ -37,7 +37,7 @@
 S_SwitchDescriptor DescrA;
 S_SwitchDescriptor DescrB;
 S_SwitchDescriptor DescrPB;
-
+S_SwitchDescriptor DescrS9;
 
 // Structure pour les traitement du Pec12
 S_Pec12_Descriptor Pec12;
@@ -93,13 +93,13 @@ void Pec12Init (void)
  } // Pec12Init
 
 
-void ScanPec12 (bool ValA, bool ValB, bool ValPB)
+void ScanPec12 (bool ValA, bool ValB, bool ValPB, bool ValS9)
 {   
     //Traitement ainti-rebond sur A, B et PB
     DoDebounce (&DescrA, ValA);
     DoDebounce (&DescrB, ValB);
     DoDebounce (&DescrPB, ValPB);
-    
+    DoDebounce (&DescrS9, ValS9);
 
        //=================================//
       // Detection Increment / Decrement //
@@ -193,14 +193,33 @@ void ScanPec12 (bool ValA, bool ValB, bool ValPB)
           //  Gestion BoutonS9  //
          //====================//
     
-    if(S_OK == 0)
+
+    if(DebounceIsPressed(&DescrS9)) //appui
     {
-        S9.OK = 1;
+        S9.PressDuration++;
+        DebounceClearPressed(&DescrS9);        
+        S9.OK = 1;   //appui bref
+        lcd_bl_on(); 
+        Pec12ClearInactivity();
+    } 
+    else if(DebounceGetInput(&DescrS9) == 0) //maintien appuyé
+    {
+        S9.PressDuration++;
+        S9.OK = 1;   //appui bref
     }
-    else
+    else if (DebounceIsReleased(&DescrS9))//relachement
     {
-        //Affacer la valleur de S9
-        S9.OK = 0;
+        DebounceClearReleased(&DescrS9);
+        if (S9.PressDuration >= 2000)
+        {
+            S9.SAVE = 1;   //appui bref
+        }
+            
+        else
+        {
+            S9.SAVE = 0;  //appui long  
+        }
+        S9.OK = 0;  //appui long
     }
     
             //====================//

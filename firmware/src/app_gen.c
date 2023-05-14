@@ -170,7 +170,7 @@ void APP_GEN_Tasks ( void )
             SPI_InitLTC2604();  
             
             // Initialisation de l'I2C
-            I2C_InitMCP79411();
+            I2C_InitMCP79411();
 
             // Initialisation du generateur
             GENSIG_Initialize(&LocalParamGen);
@@ -211,16 +211,20 @@ void APP_GEN_Tasks ( void )
             if (USB_DETECT)
             {
                 Local = 0;              
-                if(GetMessage((int8_t *)appData.newStringReceived, &RemoteParamGen, 0))
+                if(GetMessage((int8_t *)appData.newStringReceived, &RemoteParamGen))
                 {
+                   
+                   
                     FlagSave_OK();
                 }
+                
                 else
                 {
                     //clear flag save se fait losque les valeurs ont été enregistré
                     FlagSave_Clear();
                 }
                 //SendMessage((int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save_OK());
+                //SendMessage((int8_t *)appData.newStringReceived,(int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save() );
                 MENU_Execute(&RemoteParamGen, Local);
             }
             else

@@ -83,7 +83,7 @@ void __ISR(_TIMER_1_VECTOR, ipl3AUTO) IntHandlerDrvTmrInstance0(void)
     LED1_W = !LED1_R;
    
     //Obtenir la valeur de PEC
-    ScanPec12(PEC12_A, PEC12_B, PEC12_PB );
+    ScanPec12(PEC12_A, PEC12_B, PEC12_PB, S_OK);
     
     // durant son premier tour (initialisation) il attend 3 sec avant d'aller sur service task si non toutes les 10ms
     if(ATTENDRE == NCYCLE )

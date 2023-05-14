@@ -15,7 +15,7 @@
 //
 /*--------------------------------------------------------*/
 
-#include "app.h"
+#include "app_gen.h"
 #include "Mc32_I2cUtilCCS.h"
 #include "peripheral\i2c\plib_i2c.h"
 #include "peripheral\osc\plib_osc.h"
