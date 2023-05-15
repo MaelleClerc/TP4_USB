@@ -216,7 +216,8 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_USB.o: \
  ../../../../../../../framework/usb/usb_device_cdc.h \
  ../../../../../../../framework/usb/src/usb_device_function_driver.h \
  ../../../../../../../framework/usb/usb_cdc.h ../src/app_usb.h \
- ../src/app_gen.h
+ ../src/app_gen.h ../src/Mc32gest_SerComm.h ../src/DefMenuGen.h \
+ ../src/MenuGen.h
 
 ../src/app_USB.h:
 
@@ -655,3 +656,9 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/app_USB.o: \
 ../src/app_usb.h:
 
 ../src/app_gen.h:
+
+../src/Mc32gest_SerComm.h:
+
+../src/DefMenuGen.h:
+
+../src/MenuGen.h:

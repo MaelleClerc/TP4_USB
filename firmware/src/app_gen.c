@@ -212,9 +212,7 @@ void APP_GEN_Tasks ( void )
             {
                 Local = 0;              
                 if(GetMessage((int8_t *)appData.newStringReceived, &RemoteParamGen))
-                {
-                   
-                   
+                {  
                     FlagSave_OK();
                 }
                 
