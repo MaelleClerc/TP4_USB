@@ -85,14 +85,12 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
         if((Offset_recu == pParam->Offset) && (Amplitude_recue == pParam->Offset) && (Frequence_recue == pParam->Offset) && (Forme_recue == pParam->Forme )&& (SaveTodo_Old == SaveTodo))
         {
             //si ce n'est pas le cas mettre le Flag remote à 0
-            FLAG.REMOTE = 0;
+            FlagRefreshLCDRemote_Clear();
         }
         else 
         {
             //sinon le Flag remote à 1
             FLAG.REMOTE = 1;
-            //demander de refraiche LCD
-            Flag_RefreshLCD_OK();
         }
         
         // Mise a jour des parametres de pParam
