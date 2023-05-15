@@ -32,14 +32,13 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
     //afficher un caractère recu 
     
     // variable locales
-    //typedef enum  { SignalSinus, SignalTriangle, SignalDentDeScie, SignalCarre } E_Signal;
     E_FormesSignal Forme_recue;
     int16_t Frequence_recue = 0;
     int16_t Amplitude_recue = 0;
     int16_t Offset_recu = 0;
     bool static SaveTodo = 0;
     bool static SaveTodo_Old = 0;
-
+//controler que le premier caratere est un "!"
    if (USBReadBuffer[0] == '!')
    {
         // Traduction de la forme du signal
@@ -70,27 +69,29 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
                 break;
         }
 
-        //if(appData.newStringReceived[0])
+        
         // Traduction de la frequence
         Frequence_recue = atoi(&appData.newStringReceived[6]);
-        //Frequence_recue = USBReadBuffer[6];
-
+        
         // Traduction de l'amplitude
-        //Amplitude_recue = USBReadBuffer[12];
         Amplitude_recue = atoi(&appData.newStringReceived[12]);
 
         // Traduction de l'offset
         Offset_recu = atoi(&appData.newStringReceived[19]);
         
+       //traduir la save
         SaveTodo = atoi(&appData.newStringReceived[26]);
-        
+        //tester si les caratère on ete modifier durant les deux envoie
         if((Offset_recu == pParam->Offset) && (Amplitude_recue == pParam->Offset) && (Frequence_recue == pParam->Offset) && (Forme_recue == pParam->Forme )&& (SaveTodo_Old == SaveTodo))
         {
+            //si ce n'est pas le cas mettre le Flag remote à 0
             FLAG.REMOTE = 0;
         }
         else 
         {
+            //sinon le Flag remote à 1
             FLAG.REMOTE = 1;
+            //demander de refraiche LCD
             Flag_RefreshLCD_OK();
         }
         
@@ -118,11 +119,18 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
 
 void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer , bool Saved)
 {
+    //variable static local
     static int i;
+    //remplir le tableau send avec notre tb read jusqu'a la fin de l'envoie des donnée de l'offset
     for(i=0; i < 25; i++)
     {
       USBSendBuffer[i] = USBReadBuffer[i];
     }
+    //remoplir le tableau send avec les vaeur suivante
+    USBSendBuffer[25] = 'W';
+    USBSendBuffer[26] = 'P';
+    USBSendBuffer[27] = USBReadBuffer[26];
+    USBSendBuffer[28] = '#';
 //    USBSendBuffer[0] = '!';
 //    USBSendBuffer[1] = 'S';
 //    USBSendBuffer[2] = '=';
@@ -179,9 +187,6 @@ void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer , bool Saved)
 //    USBSendBuffer[21] = (char) ((pParam->Offset / 100) % 10);
 //    USBSendBuffer[22] = (char) ((pParam->Offset / 10) % 100);
 //    USBSendBuffer[23] = (char) (pParam->Offset % 1000);
-    USBSendBuffer[25] = 'W';
-    USBSendBuffer[26] = 'P';
-    USBSendBuffer[27] = USBReadBuffer[26];
-    USBSendBuffer[28] = '#';
+    
 } // SendMessage
 
