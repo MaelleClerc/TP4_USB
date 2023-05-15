@@ -122,21 +122,23 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 {
                      //mettre à 0 le comteur
                     Compt_SAVE = 0;
-                   
-                }
-                if  (New_LCD_aftersave ==1)
+                }                }
+                else if (New_LCD_aftersave ==1)
                 {
                     //enregistrer les datas dans la EEPROM
                     //NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes//enregistrer les datas dans la flash
                     pParam->Magic = MAGIC;
                     I2C_WriteSEEPROM(pParam);
+                 
+                    //clear LCD
+                    Clear_LCD();
                     //lire et décodé        
                     Menu_interface(pParam);
-                    //ajouter les # aux début des 24 ligne
+                   //ajouter les # aux début des 24 ligne
                     Pt_AffichageRemote(); 
-                    New_LCD_aftersave = 0;
-                }
-               FlagSave_Clear();
+                    //flag menu mis à jour
+                     New_LCD_aftersave = 0;
+                 }
             }
          //si le compt == 0, mettre a jour l'affichage LCD
          if ( Compt_SAVE == 0)
@@ -144,37 +146,21 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
            //afficher le menu Save
             Menu_Save();
          }
-          //incrémenté le compteur
-            Compt_SAVE++;
-           
+         //incrémenté le compteur
+         Compt_SAVE++;
         }
         else
-        {
-                        
-            if (Local != OLD_Local)
+        {                  
+            if ((Local != OLD_Local) || (Flag_RefreshLCDRemote()))
             {
+                //clear le LCD
+                Clear_LCD();
                 //lire et décodé        
                 Menu_interface(pParam);
                 //ajouter les # aux début des 24 ligne
                 Pt_AffichageRemote();
-                //clear le flag remote
-                FlagRefreshLCDRemote_Clear();
             }
-            else
-            {
-                if(Flag_RefreshLCDRemote())
-                {
-                    //clear le LCD
-                    Clear_LCD();
-                    //lire et décodé        
-                    Menu_interface(pParam);
-                    //ajouter les # aux début des 24 ligne
-                    Pt_AffichageRemote();
-                    //clear flag remote
-                    FlagRefreshLCDRemote_Clear();
-                }
-                
-            }            
+                  
         }                
     }                        
     else
@@ -253,7 +239,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 }    
 
 
-/*Design menu de sauvgade*/
+/*Design menu de sauvgade remote*/
 void Menu_Save()
 }
        // //gestion LCD// //
@@ -263,9 +249,9 @@ void Menu_Save()
         lcd_gotoxy(6,2);    
         printf_lcd("Sauvegarde"); //ligne 2
         lcd_gotoxy(9,3);    
-        printf_lcd("OK!"); //ligne 3 
-        //Flag refresh
-        Flag_RefreshLCD_OK();
+        printf_lcd("OK!"); //ligne 3
+        //flag menu save afficher
+        New_LCD_aftersave = 1;
 }
 
 void Pt_AffichageRemote()
