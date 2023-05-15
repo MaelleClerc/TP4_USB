@@ -22,7 +22,6 @@
 #define TIMER_LCD_SAUVGARDE 100
 //#define TIMER_S9_SAVE 199
 #define AFK_TIME 499 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
-#define TIMER_LCD_SAUVGARDE 100
 #define TIMER_S9_SAVE 199
 
 E_MENU SELECTION_MENU;
@@ -43,9 +42,7 @@ uint8_t MAJ_LCD_Menu = 0;
 //déclaration constate tableau
 const char tb_MenuFormes [4] [21] = { "Sinus", "Triangle", "DentDeScie", "Carre" };
 
- //initalisation des variable
- uint16_t static Compt_SAVE = 0; 
- uint8_t static New_LCD_aftersave = 0;
+ 
 // Initialisation du menu et des parametres
 void MENU_Initialize(S_ParamGen *pParam)
 {   
@@ -107,7 +104,9 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
     
     //Timer affichagetemps affichage
     uint8_t static Timer_LCD = 0;
-    
+    //initalisation des variable
+    uint16_t static Compt_SAVE = 0; 
+    uint8_t static New_LCD_aftersave = 0;
     //Tester si nous nous trouvant en local ou en USB
     if (Local == 0)
     {
@@ -137,7 +136,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                    //ajouter les # aux début des 24 ligne
                     Pt_AffichageRemote(); 
                     //flag menu mis à jour
-                     New_LCD_aftersave = 0;
+                    New_LCD_aftersave = 0;
                  }
             }
          //si le compt == 0, mettre a jour l'affichage LCD
@@ -145,9 +144,17 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
          {
            //afficher le menu Save
             Menu_Save();
+           //flag menu save afficher
+           New_LCD_aftersave = 1;
+          //incrémenté le compteur
+          Compt_SAVE++;
          }
-         //incrémenté le compteur
-         Compt_SAVE++;
+         else
+         {
+           //incrémenté le compteur
+          Compt_SAVE++;
+         }
+         
         }
         else
         {                  
@@ -250,8 +257,6 @@ void Menu_Save()
         printf_lcd("Sauvegarde"); //ligne 2
         lcd_gotoxy(9,3);    
         printf_lcd("OK!"); //ligne 3
-        //flag menu save afficher
-        New_LCD_aftersave = 1;
 }
 
 void Pt_AffichageRemote()
