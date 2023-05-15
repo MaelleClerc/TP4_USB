@@ -551,13 +551,13 @@ void APP_Tasks (void )
             else
             {
                 /* Else echo each received character by adding 1 */
-                for(i=0; i<appData.numBytesRead; i++)
+                for(i=0; i<appData.numBytesRead; i++) //à voir s'il faudra faire +1
                 {
-                    if((appData.readBuffer[i] != 0x0A) && (appData.readBuffer[i] != 0x0D))
-                    {
+                    //if((appData.readBuffer[i] != 0x0A) && (appData.readBuffer[i] != 0x0D))
+                   // {
                         SendMessage((int8_t *)appData.readBuffer,(int8_t *)appData.readBuffer, Flag_Save() );
                         //appData.readBuffer[i] = appData.readBuffer[i];
-                    }
+                   // }
                 }
                 
                 
@@ -593,7 +593,7 @@ void APP_Tasks (void )
             break;
     }
 }
-//saugarde un caract�re
+//saugarde un caractère
 void APP_DisplayChar(char car)
 {
     appData.newCharReceived = true;
