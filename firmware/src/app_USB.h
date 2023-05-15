@@ -175,7 +175,7 @@ typedef struct
     unsigned int debounceCount;
 
     /* Application CDC read buffer */
-    uint8_t * readBuffer;
+    char * readBuffer;
 
     /* Number of bytes read from Host */ 
     uint32_t numBytesRead; 

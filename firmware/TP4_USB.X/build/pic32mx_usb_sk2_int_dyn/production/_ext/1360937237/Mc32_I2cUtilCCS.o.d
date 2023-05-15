@@ -216,7 +216,7 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/Mc32_I2cUtilCCS.o: \
  ../../../../../../../framework/usb/usb_device_cdc.h \
  ../../../../../../../framework/usb/src/usb_device_function_driver.h \
  ../../../../../../../framework/usb/usb_cdc.h ../src/app_usb.h \
- ../src/app_gen.h ../src/Mc32_I2cUtilCCS.h \
+ ../src/app_gen.h ../src/DefMenuGen.h ../src/Mc32_I2cUtilCCS.h \
  ../../../../../../../framework/peripheral\i2c\plib_i2c.h \
  ../../../../../../../framework/peripheral/i2c/plib_i2c_helper_macros.h \
  ../../../../../../../framework/peripheral/i2c/processor/i2c_processor.h \
@@ -704,6 +704,8 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/Mc32_I2cUtilCCS.o: \
 ../src/app_usb.h:
 
 ../src/app_gen.h:
+
+../src/DefMenuGen.h:
 
 ../src/Mc32_I2cUtilCCS.h:
 

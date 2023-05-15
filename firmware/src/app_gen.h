@@ -57,6 +57,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stddef.h>
 #include "system_config.h"
 #include "system_definitions.h"
+#include "DefMenuGen.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -94,6 +95,8 @@ typedef enum
 
 } APP_GEN_STATES;
 
+// Variable globale
+extern S_ParamGen RemoteParamGen;
 
 // *****************************************************************************
 /* Application Data

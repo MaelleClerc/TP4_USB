@@ -19,7 +19,7 @@
 #include "bsp.h"
 #include "Mc32gestI2cSeeprom.h"
 
-#define TIMER_LCD_SAUVGARDE 100
+#define TIMER_LCD_SAUVGARDE 2000
 //#define TIMER_S9_SAVE 199
 #define AFK_TIME 499 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
 #define TIMER_S9_SAVE 199
@@ -103,16 +103,32 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 { 
     
     //Timer affichagetemps affichage
-    uint8_t static Timer_LCD = 0;
+    static uint8_t Timer_LCD = 0;
     //initalisation des variable
-    uint16_t static Compt_SAVE = 0; 
-    uint8_t static New_LCD_aftersave = 0;
+    static uint16_t Compt_SAVE = 0; 
+    static uint8_t New_LCD_aftersave = 0;
     //Tester si nous nous trouvant en local ou en USB
     if (Local == 0)
     {
-     //si la trame envoyer demande une save
+        //----------------REMOTE MODE SAVE-------------------------//
+        //si la trame envoyer demande une save
         if (Flag_Save())             
-        {      
+        {
+            //si le compt == 0, mettre a jour l'affichage LCD
+            if ( Compt_SAVE == 0)
+            {
+                //afficher le menu Save
+                Menu_Save();
+                //flag menu save afficher
+                New_LCD_aftersave = 1;
+                //incrémenté le compteur
+                Compt_SAVE++;
+            }
+            else
+            {
+                //incrémenté le compteur
+                Compt_SAVE++;
+            }
             
             if (TIMER_LCD_SAUVGARDE < Compt_SAVE)
             {             
@@ -121,7 +137,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 {
                      //mettre à 0 le comteur
                     Compt_SAVE = 0;
-                }                }
+                }                
                 else if (New_LCD_aftersave ==1)
                 {
                     //enregistrer les datas dans la EEPROM
@@ -137,25 +153,11 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     Pt_AffichageRemote(); 
                     //flag menu mis à jour
                     New_LCD_aftersave = 0;
-                 }
-            }
-         //si le compt == 0, mettre a jour l'affichage LCD
-         if ( Compt_SAVE == 0)
-         {
-           //afficher le menu Save
-            Menu_Save();
-           //flag menu save afficher
-           New_LCD_aftersave = 1;
-          //incrémenté le compteur
-          Compt_SAVE++;
-         }
-         else
-         {
-           //incrémenté le compteur
-          Compt_SAVE++;
-         }
-         
+                }
+            }  
         }
+        
+        //----------------REMOTE NO SAVE-------------------------//
         else
         {                  
             if ((Local != OLD_Local) || (Flag_RefreshLCDRemote()))
@@ -167,15 +169,21 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 //ajouter les # aux début des 24 ligne
                 Pt_AffichageRemote();
             }
+            else 
+            {
+                
+            }
                   
         }                
-    }                        
+    }   
+    
+    //----------------MODE LOCAL-------------------------//
     else
     {
         //ENREGSTRER DANS LA EEPROM//
         if (S9.OK == 0)
         {
-         //si la durree de pression est égale à 0
+         //si la durree de pression est égale à 0 == pas de save
             if (S9.PressDuration == 0)
             {
                 //mettre à jour l'affichage si le menu de sauvegarde a été activé
@@ -248,7 +256,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 
 /*Design menu de sauvgade remote*/
 void Menu_Save()
-}
+{
        // //gestion LCD// //
         //clear LCD
         Clear_LCD();
@@ -302,8 +310,7 @@ void Menu_Sauvgarde()
         lcd_gotoxy(5,3);    
         printf_lcd("(appui long)"); //ligne 3
         
-        // claer new LCD
-        New_LCD_aftersave = 1;
+        
     }
     //ne plus remettre à jour l'affichage save
     MAJ_LCD_SAVE = 1;

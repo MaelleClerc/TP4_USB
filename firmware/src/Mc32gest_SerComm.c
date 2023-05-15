@@ -23,7 +23,7 @@ S_Flag FLAG;
 //  !S=PF=2000A=10000O=-5000D=100W=1#
 
 
-bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
+void GetMessage(char *USBReadBuffer, S_ParamGen *pParam)
 {
     // Code pour récupérer les données de l'USB en utilisant SPI
     // Ici, on suppose que les données sont stockées dans un tableau nommé "usbData"
@@ -36,8 +36,8 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
     int16_t Frequence_recue = 0;
     int16_t Amplitude_recue = 0;
     int16_t Offset_recu = 0;
-    bool static SaveTodo = 0;
-    bool static SaveTodo_Old = 0;
+    bool SaveTodo = false;
+    static bool SaveTodo_Old = false;
 //controler que le premier caratere est un "!"
    if (USBReadBuffer[0] == '!')
    {
@@ -71,21 +71,22 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
 
         
         // Traduction de la frequence
-        Frequence_recue = atoi(&appData.newStringReceived[6]);
+        //Frequence_recue = atoi(&appData.readBuffer[6]);
+        Frequence_recue = atoi(&USBReadBuffer[6]);
         
         // Traduction de l'amplitude
-        Amplitude_recue = atoi(&appData.newStringReceived[12]);
+        Amplitude_recue = atoi(&USBReadBuffer[12]);
 
         // Traduction de l'offset
-        Offset_recu = atoi(&appData.newStringReceived[19]);
+        Offset_recu = atoi(&USBReadBuffer[19]);
         
        //traduir la save
-        SaveTodo = atoi(&appData.newStringReceived[26]);
+        SaveTodo = atoi(&USBReadBuffer[26]);
         //tester si les caratère on ete modifier durant les deux envoie
-        if((Offset_recu == pParam->Offset) && (Amplitude_recue == pParam->Offset) && (Frequence_recue == pParam->Offset) && (Forme_recue == pParam->Forme )&& (SaveTodo_Old == SaveTodo))
+        if((Offset_recu == pParam->Offset) && (Amplitude_recue == pParam->Amplitude) && (Frequence_recue == pParam->Frequence) && (Forme_recue == pParam->Forme )&& (SaveTodo_Old == SaveTodo))
         {
             //si ce n'est pas le cas mettre le Flag remote à 0
-            FlagRefreshLCDRemote_Clear();
+            FLAG.REMOTE = 0;
         }
         else 
         {
@@ -100,9 +101,17 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
         pParam->Offset = Offset_recu;
         SaveTodo_Old = SaveTodo;
         
-        
+        if (SaveTodo != 0)
+        {
+            FLAG.SAVE = 1;
+        }
+        else 
+        {
+            FLAG.SAVE = 0;
+        }
     }
-    return SaveTodo; 
+    
+    
     
 } // GetMessage
 
@@ -125,10 +134,19 @@ void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer , bool Saved)
       USBSendBuffer[i] = USBReadBuffer[i];
     }
     //remoplir le tableau send avec les vaeur suivante
-    USBSendBuffer[25] = 'W';
-    USBSendBuffer[26] = 'P';
-    USBSendBuffer[27] = USBReadBuffer[26];
-    USBSendBuffer[28] = '#';
+    //USBSendBuffer[24] = 'W';
+    USBSendBuffer[25] = 'P';
+    USBSendBuffer[26] = '=';
+    if(Saved)
+    {
+        USBSendBuffer[27] = '1';
+    }
+    else
+    {
+        USBSendBuffer[27] = '0';
+    }
+   USBSendBuffer[28] = '#';
+    //USBSendBuffer[28] = '#';
 //    USBSendBuffer[0] = '!';
 //    USBSendBuffer[1] = 'S';
 //    USBSendBuffer[2] = '=';

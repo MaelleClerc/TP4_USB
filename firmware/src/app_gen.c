@@ -210,24 +210,18 @@ void APP_GEN_Tasks ( void )
             //execution menu
             if (USB_DETECT)
             {
-                Local = 0;              
-                if(GetMessage((int8_t *)appData.newStringReceived, &RemoteParamGen))
-                {  
-                    FlagSave_OK();
-                }
-                
-                else
-                {
-                    //clear flag save se fait losque les valeurs ont été enregistré
-                    FlagSave_Clear();
-                }
-                //SendMessage((int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save_OK());
-                //SendMessage((int8_t *)appData.newStringReceived,(int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save() );
+                //mettre le paramètre à 0
+                Local = 0;       
+                //obtenir la chaine de caratere
+                GetMessage(appData.readBuffer, &RemoteParamGen);
+                //executer menu execute
                 MENU_Execute(&RemoteParamGen, Local);
             }
             else
             {   
+                //mettre le paramètre à 1
                 Local = 1;
+                //executer menu execute
                 MENU_Execute(&LocalParamGen, Local);
             }
             
