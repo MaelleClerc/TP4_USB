@@ -30,9 +30,7 @@ void GetMessage(char *USBReadBuffer, S_ParamGen *pParam)
     // et que la fonction SPITransfer() est utilisée pour la communication SPI
     //SPITransfer();
     //afficher un caractère recu 
-    
-    // variable locales
-    E_FormesSignal Forme_recue;
+     E_FormesSignal Forme_recue;
     int16_t Frequence_recue = 0;
     int16_t Amplitude_recue = 0;
     int16_t Offset_recu = 0;
@@ -111,6 +109,11 @@ void GetMessage(char *USBReadBuffer, S_ParamGen *pParam)
         }
     }
     
+else
+{
+    //si ce n'est pas le cas mettre le Flag remote à 0
+     FLAG.REMOTE = 0;
+}
     
     
 } // GetMessage
