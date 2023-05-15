@@ -1,8 +1,8 @@
 // Tp3  manipulation MenuGen avec PEC12
 // C. HUBER  10/02/2015 pour SLO2 2014-2015
 // Fichier MenuGen.c
-// Gestion du menu  du g�?©n�?©rateur
-// Traitement cyclique �?  10 ms
+// Gestion du menu  du gÃ?Â©nÃ?Â©rateur
+// Traitement cyclique Ã?Â  10 ms
 
 
 
@@ -21,13 +21,14 @@
 
 #define TIMER_LCD_SAUVGARDE 100
 //#define TIMER_S9_SAVE 199
-#define AFK_TIME 499 //Durée d'inactivité avant d'étaindre le rétro-éclairage
+#define AFK_TIME 499 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
 #define TIMER_LCD_SAUVGARDE 100
 #define TIMER_S9_SAVE 199
 
 E_MENU SELECTION_MENU;
 S_No_save Val;
-// Structure pour les traitement du Pec12
+
+// Structure pour les traitement du Pec12 et bouton S9
 S_Pec12_Descriptor Pec12;
 S_S9_Descriptor S9;
 
@@ -35,11 +36,11 @@ S_S9_Descriptor S9;
 S_Flag FLAG;
 bool OLD_Local ;
 
-//initailisation de la varible pour mettre � jour ou non l'affichage
+//initailisation de la varible pour mettre à jour ou non l'affichage
 uint8_t MAJ_LCD_SAVE = 0;
 uint8_t MAJ_LCD_Menu = 0;
 
-//d�claration constate tableau
+//déclaration constate tableau
 const char tb_MenuFormes [4] [21] = { "Sinus", "Triangle", "DentDeScie", "Carre" };
 
  //initalisation des variable
@@ -58,12 +59,11 @@ void MENU_Initialize(S_ParamGen *pParam)
     //clear LCD
     Clear_LCD();
     //menu principale
-    
     Menu_interface(pParam);
+    //activer le local à 1 (car affichage proche du remote)
     OLD_Local = 1;
-    //initaliser premiemiere parametre a  pointer dans le menu
-    SELECTION_MENU = MENU_FORME;  
-    
+    //initaliser premiemiere parametre aÂ  pointer dans le menu
+    SELECTION_MENU = MENU_FORME;      
 }
 
 //gere l'affichage LCD pour le menu principal
@@ -96,7 +96,7 @@ void Menu_interface(S_ParamGen *pParam)
     lcd_gotoxy(13,4);
     printf_lcd("%d", (int)pParam->Offset);
     
-    //initaliser premiemiere parametre a  pointer dans le menu
+    //initaliser premiemiere parametre aÂ  pointer dans le menu
     SELECTION_MENU = MENU_FORME;  
 }
 
@@ -108,18 +108,19 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
     //Timer affichagetemps affichage
     uint8_t static Timer_LCD = 0;
     
-    
+    //Tester si nous nous trouvant en local ou en USB
     if (Local == 0)
     {
-        if (Flag_Save())//on veut save les info ou non, modifiier la variable               
+     //si la trame envoyer demande une save
+        if (Flag_Save())             
         {      
             
-            if ((TIMER_LCD_SAUVGARDE < Compt_SAVE))
+            if (TIMER_LCD_SAUVGARDE < Compt_SAVE)
             {             
                 //si les vleur son changer
                 if(Flag_RefreshLCDRemote())
                 {
-                     //mettre � 0 le comteur
+                     //mettre à 0 le comteur
                     Compt_SAVE = 0;
                    
                 }
@@ -129,16 +130,21 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     //NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes//enregistrer les datas dans la flash
                     pParam->Magic = MAGIC;
                     I2C_WriteSEEPROM(pParam);
-                    //lire et d�cod�        
+                    //lire et décodé        
                     Menu_interface(pParam);
-                    //ajouter les # aux d�but des 24 ligne
+                    //ajouter les # aux début des 24 ligne
                     Pt_AffichageRemote(); 
                     New_LCD_aftersave = 0;
                 }
                FlagSave_Clear();
             }
-            
+         //si le compt == 0, mettre a jour l'affichage LCD
+         if ( Compt_SAVE == 0)
+         {
+           //afficher le menu Save
             Menu_Save();
+         }
+          //incrémenté le compteur
             Compt_SAVE++;
            
         }
@@ -147,9 +153,9 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                         
             if (Local != OLD_Local)
             {
-                //lire et d�cod�        
+                //lire et décodé        
                 Menu_interface(pParam);
-                //ajouter les # aux d�but des 24 ligne
+                //ajouter les # aux début des 24 ligne
                 Pt_AffichageRemote();
                 //clear le flag remote
                 FlagRefreshLCDRemote_Clear();
@@ -160,9 +166,9 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 {
                     //clear le LCD
                     Clear_LCD();
-                    //lire et d�cod�        
+                    //lire et décodé        
                     Menu_interface(pParam);
-                    //ajouter les # aux d�but des 24 ligne
+                    //ajouter les # aux début des 24 ligne
                     Pt_AffichageRemote();
                     //clear flag remote
                     FlagRefreshLCDRemote_Clear();
@@ -176,12 +182,12 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
         //ENREGSTRER DANS LA EEPROM//
         if (S9.OK == 0)
         {
+         //si la durree de pression est égale à 0
             if (S9.PressDuration == 0)
             {
-                //mettre � jour l'affichage si le menu de sauvegarde a �t� activ�
+                //mettre à jour l'affichage si le menu de sauvegarde a été activé
                 if (MAJ_LCD_Menu == 0)
                 {
-
                     /*gestion de l'affichage avec le PEG12*/
                     Menu_GESTION_PEG12(pParam);    
                 }
@@ -193,12 +199,12 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     Menu_interface(pParam);
                     /*gestion de l'affichage avec le PEG12*/
                     Menu_GESTION_PEG12(pParam);  
-                    //menu mis � jour
+                    //menu mis à jour
                     MAJ_LCD_Menu = 0;
 
                 }
             }
-            //si le maintiens du bouton S9 >= � 2 sec
+            //si le maintiens du bouton S9 >= à  2 sec
             else if ((S9.SAVE == 1)&&(S9.PressDuration > 0))
             {          
                 /*Afficher sauvgade OK*/
@@ -209,7 +215,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 Timer_LCD ++;
                 if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
                 {
-                    //remettre � 0 les timer
+                    //remettre à 0 les timer
                     S9.SAVE = 0;
                     S9.PressDuration = 0;
                     Timer_LCD = 0;
@@ -229,7 +235,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 Timer_LCD ++;
                 if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
                 {
-                    //remettre � 0 les timer
+                    //remettre à 0 les timer
                     S9.PressDuration = 0;
                     Timer_LCD = 0;
                 }           
@@ -249,10 +255,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 
 /*Design menu de sauvgade*/
 void Menu_Save()
-{
-    //executer 1 seul fois
-    if(Flag_RefreshLCD())
-    {
+}
        // //gestion LCD// //
         //clear LCD
         Clear_LCD();
@@ -261,12 +264,8 @@ void Menu_Save()
         printf_lcd("Sauvegarde"); //ligne 2
         lcd_gotoxy(9,3);    
         printf_lcd("OK!"); //ligne 3 
-        New_LCD_aftersave = 1;
-        //enregistrer les param�tre re�u//
-        //ne plus remettre � jour l'affichage save
-        FlagRefreshLCD_Clear();       
-    }  
-   
+        //Flag refresh
+        Flag_RefreshLCD_OK();
 }
 
 void Pt_AffichageRemote()
@@ -284,7 +283,7 @@ void Pt_AffichageRemote()
     lcd_gotoxy(1,4);
     printf_lcd("#");
 }
-void MAJ_Valeur (S_ParamGen *pParam)
+/*void MAJ_Valeur (S_ParamGen *pParam)
 {
     //afficher valeur
     lcd_gotoxy(11,1);
@@ -298,8 +297,8 @@ void MAJ_Valeur (S_ParamGen *pParam)
     //afficher valeur
     lcd_gotoxy(13,4);
     printf_lcd("%d",  pParam->Offset);
-}
-/*Design menu de sauvgade*/
+}*/
+/*Design menu de sauvgade Local*/
 void Menu_Sauvgarde()
 {
     if(MAJ_LCD_SAVE == 0)
@@ -315,11 +314,11 @@ void Menu_Sauvgarde()
         // claer new LCD
         New_LCD_aftersave = 1;
     }
-    //ne plus remettre � jour l'affichage save
+    //ne plus remettre à jour l'affichage save
     MAJ_LCD_SAVE = 1;
 }
 
-/*Design menu de sauvgade OK*/
+/*Design menu de sauvgade OK local*/
 void Sauvgarde_OK()
 {
     if(MAJ_LCD_SAVE == 1)
@@ -332,13 +331,13 @@ void Sauvgarde_OK()
         lcd_gotoxy(9,3);    
         printf_lcd("OK!"); //ligne 3 
     }
-    //ne plus remettre � jour l'affichage save OK
+    //ne plus remettre à jour l'affichage save OK
     MAJ_LCD_SAVE = 0;
-    //mettre � jour le LCD
+    //mettre à jour le LCD
     MAJ_LCD_Menu = 1;    
 }
 
-/*Design menu de sauvgade ANNULER*/
+/*Design menu de sauvgade ANNULER local*/
 void Sauvgarde_ANNULE()
 {
     if(MAJ_LCD_SAVE == 1)
@@ -351,9 +350,9 @@ void Sauvgarde_ANNULE()
         lcd_gotoxy(6,3);    
         printf_lcd("ANNULEE!"); //ligne 3 
     }
-    //ne plus remettre � jour l'affichage save OK
+    //ne plus remettre à jour l'affichage save OK
     MAJ_LCD_SAVE = 0;
-    //mettre � jour le LCD
+    //mettre à jour le LCD
     MAJ_LCD_Menu = 1; 
 }
 
@@ -364,7 +363,7 @@ void Clear_LCD()
     lcd_ClearLine(2);
     lcd_ClearLine(3);
     lcd_ClearLine(4);
-    //mettre le flag � 0
+    //mettre le flag à 0
     FlagRefreshLCD_Clear();
 }
 
@@ -410,7 +409,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
 {
     if((Pec12IsPlus() ==0) && (Pec12IsMinus() == 0) && (Pec12IsOK() == 0)&& (Pec12IsESC() == 0) && (S9.OK == 0))
     {
-       //Test durée d'inactivité > 5sec
+       //Test durÃ©e d'inactivitÃ© > 5sec
        if(Pec12.InactivityDuration >= AFK_TIME)
        {
            //Pec12.InactivityDuration = 0;
@@ -448,16 +447,16 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //incrementer choix du menu
                      if (Pec12IsPlus())
                      {
-                         //modifier la sélection du menu
+                         //modifier la sÃ©lection du menu
                          SELECTION_MENU = MENU_FREQU;
-                         //ecrire  "*" du LCD pour selectionner la fr�quence
+                         //ecrire  "*" du LCD pour selectionner la fréquence
                          lcd_gotoxy(1,2);
                          printf_lcd("*");
                      }
                      //decrementer choix du menu
                      else if (Pec12IsMinus())
                      {
-                         //modifier la sélection du menu
+                         //modifier la sÃ©lection du menu
                          SELECTION_MENU = MENU_OFFSET;
                          //ecrire  "*" du LCD pour selectionner l'offset
                          lcd_gotoxy(1,4);
@@ -489,7 +488,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //Test si incrementer la forme
                      if (Pec12IsPlus())
                      {
-                         //test si egal a� la Singnal carree
+                         //test si egal aÂ la Singnal carree
                          if(Val.Forme == 3)
                          {
                              Val.Forme = 0;
@@ -514,7 +513,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                              Val.Forme --;
                          }
                      }
-                     //supprimer les caract�re sur la 2ere ligne
+                     //supprimer les caractère sur la 2ere ligne
                      lcd_ClearLine(1);
                      //afficher "?Forme"
                      lcd_gotoxy(1,1);
@@ -537,11 +536,11 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire                    
                      else 
                      {
-                         //R�cuperer la valeur de base
+                         //Récuperer la valeur de base
                          Val.Forme = pParam->Forme;
                      }
                      //GESTION AFFICHAGE//
-                     //supprimer les caract�re sur la 2ere ligne
+                     //supprimer les caractère sur la 2ere ligne
                      lcd_ClearLine(1);
                      //afficher "*Forme"
                      lcd_gotoxy(1,1);
@@ -569,7 +568,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //incrementer choix du menu
                      if (Pec12IsPlus())
                      {  
-                         //modifier la sélection du menu
+                         //modifier la sÃ©lection du menu
                          SELECTION_MENU = MENU_AMPLI;
                          //ecrire  "*" du LCD pour selectionner l'ampli
                          lcd_gotoxy(1,3);
@@ -578,7 +577,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //decrementer choix du menu
                      else if (Pec12IsMinus())
                      {
-                         //modifier la sélection du menu
+                         //modifier la sÃ©lection du menu
                          SELECTION_MENU = MENU_FORME;
                          //ecrire  "*" du LCD pour selectionner la forme
                          lcd_gotoxy(1,1);
@@ -622,7 +621,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //decrementer la valeur de la frequence
                      else
                      {
-                         //test si inferieur ou égal a� la frequence min
+                         //test si inferieur ou Ã©gal aÂ la frequence min
                          if(Val.Frequence <= 20 )
                          {
                              Val.Frequence = 2000;
@@ -635,7 +634,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                          }
                      }
                      //GESTION AFFICHAGE//
-                     //supprimer les caract�re sur la 2ere ligne
+                     //supprimer les caractère sur la 2ere ligne
                      lcd_ClearLine(2);
                      //afficher "?Freq[Hz]"
                      lcd_gotoxy(1,2);
@@ -660,7 +659,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                          Val.Frequence = pParam->Frequence;
                      }
                      //GESTION AFFICHAGE//
-                     //supprimer les caract�re sur la 2ere ligne
+                     //supprimer les caractère sur la 2ere ligne
                      lcd_ClearLine(2);
                      //afficher "?Freq[Hz]"
                      lcd_gotoxy(1,2);
@@ -689,7 +688,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //incrementer choix du menu
                      if (Pec12IsPlus())
                      {
-                         //modifier la sélection du menu
+                         //modifier la sÃ©lection du menu
                          SELECTION_MENU = MENU_OFFSET;
                          //ecrire  "*" du LCD pour selectionner l'offset
                          lcd_gotoxy(1,4);
@@ -698,7 +697,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //decrementer choix du menu
                      else if (Pec12IsMinus())
                      {
-                         //modifier la sélection du menu
+                         //modifier la sÃ©lection du menu
                          SELECTION_MENU = MENU_FREQU;
                          //ecrire  "*" du LCD pour selectionner la frequence
                          lcd_gotoxy(1,2);
@@ -725,7 +724,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //incrementer la valeur de l'amplitude 
                      if (Pec12IsPlus())
                      {
-                         //test si superieur ou egal a�  l'amplitude max
+                         //test si superieur ou egal aÂ  l'amplitude max
                          if(Val.Amplitude >= 10000 )
                          {
                              Val.Amplitude = 0;
@@ -739,7 +738,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //decrementer la valeur de l'amplitude 
                      else
                      {
-                         //test si inferieur ou egal e�  l'amplitude min
+                         //test si inferieur ou egal eÂ  l'amplitude min
                          if(Val.Amplitude <= 0 )
                          {
                              Val.Amplitude = 10000;
@@ -751,7 +750,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                          }
                      }
                      //GESTION AFFICHAGE//
-                     //supprimer les caract�re sur la 3ere ligne
+                     //supprimer les caractère sur la 3ere ligne
                      lcd_ClearLine(3);
                      //afficher "?Ampl[mV]"
                      lcd_gotoxy(1,3);
@@ -769,18 +768,18 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                          //sauvgarder la nouvelle valeur 
                           pParam->Amplitude = Val.Amplitude;
 
-                         //mettre � jour l'amplitude du signal
+                         //mettre à jour l'amplitude du signal
                          GENSIG_UpdateSignal(pParam);
 
                      }
                      //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire                     
                      else 
                      {
-                         //R�cuperer la valeur de base
+                         //Récuperer la valeur de base
                          Val.Amplitude = pParam->Amplitude;
                      }
                      //GESTION AFFICHAGE//
-                     //supprimer les caract�re sur la 2ere ligne
+                     //supprimer les caractère sur la 2ere ligne
                      lcd_ClearLine(3);
                      //afficher "*Ampl[mV]"
                      lcd_gotoxy(1,3);
@@ -809,7 +808,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //incrementer choix du menu
                      if (Pec12IsPlus())
                      {
-                         //modifier la sélection du menu
+                         //modifier la sÃ©lection du menu
                          SELECTION_MENU = MENU_FORME;
                          //ecrire  "*" du LCD pour selectionner la forme
                          lcd_gotoxy(1,1);
@@ -818,7 +817,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //decrementer choix du menu
                      else if (Pec12IsMinus())
                      {
-                         //modifier la sélection du menu
+                         //modifier la sÃ©lection du menu
                          SELECTION_MENU = MENU_AMPLI;
                          //ecrire  "*" du LCD pour selectionner l'ampli
                          lcd_gotoxy(1,3);
@@ -862,7 +861,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                      //decrementer la valeur de l'offset
                      else
                      {
-                         //test si inferieur ou egal a�  l'offset min
+                         //test si inferieur ou egal aÂ  l'offset min
                          if(Val.Offset <= -5000 )
                          {
                              Val.Offset = (-5000);
@@ -874,7 +873,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                          }
                      }
                      //GESTION AFFICHAGE//
-                     //supprimer les caract�re sur la 4ere ligne
+                     //supprimer les caractère sur la 4ere ligne
                      lcd_ClearLine(4);
                      //afficher "?Offset[mV]"
                      lcd_gotoxy(1,4);
@@ -892,17 +891,17 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
                          //sauvgarder la nouvelle valeur 
                          pParam->Offset = Val.Offset;
 
-                         //mettre � jour l'offset du signal
+                         //mettre à jour l'offset du signal
                          GENSIG_UpdateSignal(pParam);
                      }
                      //si on appuye sur esc, retourne sur affichage principal et garde l'ancienne val en memoire 
                      else 
                      {
-                         //R�cuperer la valeur de base
+                         //Récuperer la valeur de base
                          Val.Offset = pParam->Offset;
                      }
                      //GESTION AFFICHAGE//
-                     //supprimer les caract�re sur la 4ere ligne
+                     //supprimer les caractère sur la 4ere ligne
                      lcd_ClearLine(4);
                      //afficher "*Offset[mV]"
                      lcd_gotoxy(1,4);
@@ -920,7 +919,7 @@ void Menu_GESTION_PEG12(S_ParamGen *pParam)
         }
         
     }
-//mettre � 0 les valeurs du PEG12
+//mettre à 0 les valeurs du PEG12
     Pec12ClearOK();
     Pec12ClearESC();
     Pec12ClearMinus();
