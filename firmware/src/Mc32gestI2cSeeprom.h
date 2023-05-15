@@ -13,6 +13,7 @@
 
 
 #include "DefMenuGen.h"
+#include "Mc32_I2cUtilCCS.h"
 #include <stdint.h>
 
 

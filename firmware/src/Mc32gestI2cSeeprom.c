@@ -38,7 +38,7 @@
 
 void I2C_InitMCP79411(void)
 {
-   bool Fast = true;
+   bool Fast = false;
    i2c_init( Fast );
 } //end I2C_InitMCP79411
 
@@ -57,6 +57,12 @@ void I2C_WriteSEEPROM(S_ParamGen *SrcData)
     i2c_write(MCP79411_EEPROM_W);// Adresse de MPC79411 + Ecriture
     for(i = 0; i < NbBytes; i++)
     {
+        if (i % 7 == 0)
+        {
+            i2c_start();
+            i2c_write(MCP79411_EEPROM_W);
+        }
+        
         i2c_write(*pt_charStruct);
         pt_charStruct++; 
     }
@@ -70,15 +76,25 @@ void I2C_ReadSEEPROM(S_ParamGen *DstData)
     int i;
     static uint16_t NbBytes = 14;
     uint8_t *pt_charStruct; 
-   // Lecture
-
-    i2c_start();
+    uint8_t ack;
+    
     //pointeur sur la structure // 
     pt_charStruct = (uint8_t *)DstData;
     
-    i2c_write(MCP79411_EEPROM_R); // Adresse de MPC79411 + Ecriture
+   // Lecture
+    do{
+        i2c_start();
+        ack = i2c_write(MCP79411_EEPROM_R); // Adresse de MPC79411 + Ecriture
+    }while(!ack);
+    
     for(i = 0; i < NbBytes; i++)
     {
+        if (i % 7 == 0)
+        {
+            i2c_start();
+            i2c_write(MCP79411_EEPROM_R);
+        }
+        
         *pt_charStruct = i2c_read(0);
         pt_charStruct++;
     }

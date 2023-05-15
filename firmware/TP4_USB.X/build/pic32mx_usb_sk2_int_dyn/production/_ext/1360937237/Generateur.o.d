@@ -141,7 +141,7 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/Generateur.o: \
  ../../../../../../../framework/peripheral/osc/processor/../templates/osc_BTPLLClockOut_Unsupported.h \
  ../../../../../../../framework/system/clk/sys_clk_compatibility.h \
  ../../../../../../../framework/driver/tmr/drv_tmr_compatibility.h \
- ../src/Mc32gestI2cSeeprom.h
+ ../src/Mc32gestI2cSeeprom.h ../src/Mc32_I2cUtilCCS.h
 
 ../src/Mc32NVMUtil.h:
 
@@ -430,3 +430,5 @@ build/pic32mx_usb_sk2_int_dyn/production/_ext/1360937237/Generateur.o: \
 ../../../../../../../framework/driver/tmr/drv_tmr_compatibility.h:
 
 ../src/Mc32gestI2cSeeprom.h:
+
+../src/Mc32_I2cUtilCCS.h:
