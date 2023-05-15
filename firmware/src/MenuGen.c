@@ -255,7 +255,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
 
 /*Design menu de sauvgade*/
 void Menu_Save()
-}
+{
        // //gestion LCD// //
         //clear LCD
         Clear_LCD();

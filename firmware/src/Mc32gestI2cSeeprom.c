@@ -57,6 +57,12 @@ void I2C_WriteSEEPROM(S_ParamGen *SrcData)
     i2c_write(MCP79411_EEPROM_W);// Adresse de MPC79411 + Ecriture
     for(i = 0; i < NbBytes; i++)
     {
+        if (i % 7 == 0)
+        {
+            i2c_start();
+            i2c_write(MCP79411_EEPROM_W); 
+        }
+        
         i2c_write(*pt_charStruct);
         pt_charStruct++; 
     }
@@ -79,6 +85,12 @@ void I2C_ReadSEEPROM(S_ParamGen *DstData)
     i2c_write(MCP79411_EEPROM_R); // Adresse de MPC79411 + Ecriture
     for(i = 0; i < NbBytes; i++)
     {
+        if (i % 7 == 0)
+        {
+            i2c_start();
+            i2c_write(MCP79411_EEPROM_R); 
+        }
+        
         *pt_charStruct = i2c_read(0);
         pt_charStruct++;
     }
