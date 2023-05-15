@@ -52,10 +52,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 // *****************************************************************************
 
-#include <stdint.h>
+
 #include <stdbool.h>
 #include <stddef.h>
-#include <stdlib.h>
 #include "system_config.h"
 #include "system_definitions.h"
 
@@ -63,7 +62,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #ifdef __cplusplus  // Provide C++ Compatibility
 
 extern "C" {
-
+   
 #endif
 // DOM-IGNORE-END 
 
@@ -88,6 +87,7 @@ typedef enum
 {
 	/* Application's state machine's initial state. */
 	APP_GEN_STATE_INIT=0,
+    APP_GEN_STATE_WAIT,      
 	APP_GEN_STATE_SERVICE_TASKS,
 
 	/* TODO: Define states used by the application state machine. */
@@ -199,8 +199,8 @@ void APP_GEN_Initialize ( void );
  */
 
 void APP_GEN_Tasks( void );
-void APP_GEN_DisplayChar(char car);
 
+void APP_GEN_UpdateState(APP_GEN_STATES newState);
 
 #endif /* _APP_GEN_H */
 

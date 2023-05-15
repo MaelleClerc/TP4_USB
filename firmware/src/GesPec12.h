@@ -47,6 +47,8 @@ typedef struct {
 typedef struct {
 
             uint8_t OK  : 1;              // événement action OK
+            uint16_t PressDuration;   // Pour durée pression du P.B.
+            uint8_t SAVE : 1;
 
 } S_S9_Descriptor;
 
@@ -82,7 +84,7 @@ typedef struct {
 // A:                     |_____________________|                    
 //     __________                      ________________
 // B:            |____________________|
-void ScanPec12 (bool ValA, bool ValB, bool ValPB);
+void ScanPec12 (bool ValA, bool ValB, bool ValPB, bool ValS9);
 
 void Pec12Init (void);
 
@@ -97,7 +99,7 @@ bool Pec12IsESC    (void);
 //       Pec12NoActivity   true indique abscence d'activité sur PEC12
 bool Pec12NoActivity    (void);
 //       S9_OK             true indique une pression sur le switch S9
-bool S9_OK    (void);
+//bool S9_OK    (void);
 
 
 
@@ -113,7 +115,7 @@ void Pec12ClearESC   (void);
 //       Pec12ClearInactivity     annule indication action Inactivity
 void Pec12ClearInactivity   (void);
 //       S9ClearOK    annule indication action ok
-void S9ClearOK (void);
+//void S9ClearOK (void);
 
 
 #endif

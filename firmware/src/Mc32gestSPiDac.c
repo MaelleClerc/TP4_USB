@@ -18,7 +18,7 @@
 /*--------------------------------------------------------*/
 
 
-#include "app.h"   // pour system_config et autre
+#include "app_gen.h"   // pour system_config et autre
 #include "Mc32gestSpiDac.h"
 #include "Mc32SpiUtil.h"
 #include "peripheral\SPI\plib_spi.h"

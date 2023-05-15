@@ -52,10 +52,19 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: Included Files 
 // *****************************************************************************
 // *****************************************************************************
-
+#include <stdint.h>
+#include <stdbool.h>
 #include "app_gen.h"
 #include "Mc32DriverLcd.h"
-
+#include "DefMenuGen.h"
+#include "MenuGen.h"
+#include "bsp.h"
+#include "GesPec12.h"
+#include "Generateur.h"
+#include "Mc32gestSpiDac.h"
+#include "Mc32gest_SerComm.h"
+#include "app_USB.h"
+#include "Mc32gestI2cSeeprom.h"
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -78,7 +87,12 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 */
 
 APP_GEN_DATA app_genData;
-
+S_ParamGen LocalParamGen;
+S_ParamGen RemoteParamGen;
+APP_DATA appData;
+//flag permettant d'initialiser l'ecran
+uint8_t flag_tour = 1 ;
+bool Local;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -116,7 +130,7 @@ APP_GEN_DATA app_genData;
 void APP_GEN_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-    app_genData.state = APP_GEN_STATE_INIT;
+     APP_GEN_UpdateState(APP_GEN_STATE_INIT);
 
     
     /* TODO: Initialize your application's state machine and other
@@ -142,25 +156,92 @@ void APP_GEN_Tasks ( void )
         /* Application's initial state. */
         case APP_GEN_STATE_INIT:
         {
+            //reliser l'affichage démarage
             lcd_init();
             lcd_bl_on();
-            printf_lcd("Hello");
+            lcd_gotoxy(1,1);
+            printf_lcd("TP4 UsbGen 2023");
+            lcd_gotoxy(1,2);
+            printf_lcd("Caroline Mieville");
+            lcd_gotoxy(1,3);
+            printf_lcd("Maelle Clerc");
             
-            app_genData.state = APP_GEN_STATE_SERVICE_TASKS;
+            // Init SPI DAC
+            SPI_InitLTC2604();  
+            
+            // Initialisation de l'I2C
+            I2C_InitMCP79411();
+
+            // Initialisation du generateur
+            GENSIG_Initialize(&LocalParamGen);
+            //realiser le signal
+            GENSIG_UpdateSignal(&LocalParamGen);
+            //mettre à jour la période
+            GENSIG_UpdatePeriode(&LocalParamGen);
+            
+            //Init Pec12Init
+            Pec12Init();
+            
+            /* initialisation des timers */
+            DRV_TMR0_Start();
+            DRV_TMR1_Start();  
+            
+            //Synchroniser les paramètres
+            RemoteParamGen = LocalParamGen;
+            
+            
+            APP_GEN_UpdateState(APP_GEN_STATE_WAIT);
             
             break;
         }
 
         case APP_GEN_STATE_SERVICE_TASKS:
         {
-            if (app_genData.newCharReceived == true)
+            //toggle la led2
+            LED2_W = !LED2_R;
+         //Afficher le nouvel affichage lors du premier tours
+            if (flag_tour == 1)
             {
-                app_genData.newCharReceived = false;
-                
-                lcd_gotoxy(1, 2);
-                printf_lcd("%c", app_genData.newChar);
+                // Initialisation du menu
+                MENU_Initialize(&LocalParamGen);
+                //remettre le flag à 0 car s'initailise une seul fois
+                flag_tour = 0;
             }
+            //execution menu
+            if (USB_DETECT)
+            {
+                Local = 0;              
+                if(GetMessage((int8_t *)appData.newStringReceived, &RemoteParamGen))
+                {  
+                    FlagSave_OK();
+                }
+                
+                else
+                {
+                    //clear flag save se fait losque les valeurs ont été enregistré
+                    FlagSave_Clear();
+                }
+                //SendMessage((int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save_OK());
+                //SendMessage((int8_t *)appData.newStringReceived,(int8_t *)appData.readBuffer, &RemoteParamGen, Flag_Save() );
+                MENU_Execute(&RemoteParamGen, Local);
+            }
+            else
+            {   
+                Local = 1;
+                MENU_Execute(&LocalParamGen, Local);
+            }
+            
+            //le prochaine état est: attente
+            APP_GEN_UpdateState(APP_GEN_STATE_WAIT);
+            //toogle la LED2
+            LED2_W = !LED2_R;
+            
         
+            break;
+        }
+        case APP_GEN_STATE_WAIT:
+        {
+          
             break;
         }
 
@@ -176,12 +257,12 @@ void APP_GEN_Tasks ( void )
     }
 }
 
-
-void APP_GEN_DisplayChar(char car)
+void APP_GEN_UpdateState(APP_GEN_STATES newState)
 {
-    app_genData.newCharReceived = true;
-    app_genData.newChar = car;
+    app_genData.state = newState;
 }
+
+
  
 
 /*******************************************************************************

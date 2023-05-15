@@ -6,10 +6,8 @@
 // Fichier Generateur.h
 // Prototypes des fonctions du générateur  de signal
 
-#include <math.h>
-#include <stdint.h>
-#include <stdbool.h>
 
+#include <stdint.h>
 #include "DefMenuGen.h"
 
 
