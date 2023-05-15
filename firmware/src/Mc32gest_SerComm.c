@@ -1,5 +1,5 @@
 // Mc32Gest_SerComm.C
-// fonction d'émission et de réception des message
+// fonction d'Ã©mission et de rÃ©ception des message
 // transmis en USB CDC
 // Canevas TP4 SLO2 2015-2015
 
@@ -17,7 +17,7 @@ APP_DATA appData;
 S_Flag FLAG;
 
 // Fonction de reception  d'un  message
-// Met à jour les paramètres du generateur a partir du message recu
+// Met Ã  jour les paramÃ¨tres du generateur a partir du message recu
 // Format du message
 //  !S=TF=2000A=10000O=+5000D=100W=0#
 //  !S=PF=2000A=10000O=-5000D=100W=1#
@@ -25,11 +25,11 @@ S_Flag FLAG;
 
 bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
 {
-    // Code pour récupérer les données de l'USB en utilisant SPI
-    // Ici, on suppose que les données sont stockées dans un tableau nommé "usbData"
-    // et que la fonction SPITransfer() est utilisée pour la communication SPI
+    // Code pour rÃ©cupÃ©rer les donnÃ©es de l'USB en utilisant SPI
+    // Ici, on suppose que les donnÃ©es sont stockÃ©es dans un tableau nommÃ© "usbData"
+    // et que la fonction SPITransfer() est utilisÃ©e pour la communication SPI
     //SPITransfer();
-    //afficher un caractère recu 
+    //afficher un caractÃ¨re recu 
     
     // variable locales
     //typedef enum  { SignalSinus, SignalTriangle, SignalDentDeScie, SignalCarre } E_Signal;
@@ -109,7 +109,7 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
 
 
 // Fonction d'envoi d'un  message
-// Rempli le tampon d'émission pour USB en fonction des paramètres du générateur
+// Rempli le tampon d'Ã©mission pour USB en fonction des paramÃ¨tres du gÃ©nÃ©rateur
 // Format du message
 // !S=TF=2000A=10000O=+5000D=25WP=0#
 // !S=TF=2000A=10000O=+5000D=25WP=1#    // ack sauvegarde
@@ -119,7 +119,7 @@ bool GetMessage(int8_t *USBReadBuffer, S_ParamGen *pParam)
 void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer , bool Saved)
 {
     static int i;
-    for(i=0; i < 24; i++)
+    for(i=0; i < 25; i++)
     {
       USBSendBuffer[i] = USBReadBuffer[i];
     }
@@ -179,9 +179,9 @@ void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer , bool Saved)
 //    USBSendBuffer[21] = (char) ((pParam->Offset / 100) % 10);
 //    USBSendBuffer[22] = (char) ((pParam->Offset / 10) % 100);
 //    USBSendBuffer[23] = (char) (pParam->Offset % 1000);
-    USBSendBuffer[24] = 'W';
-    USBSendBuffer[25] = 'P';
-    USBSendBuffer[26] = (char) Saved;
-    USBSendBuffer[27] = '#';
+    USBSendBuffer[25] = 'W';
+    USBSendBuffer[26] = 'P';
+    USBSendBuffer[27] = USBReadBuffer[26];
+    USBSendBuffer[28] = '#';
 } // SendMessage
 
