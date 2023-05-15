@@ -156,6 +156,9 @@ void APP_GEN_Tasks ( void )
         /* Application's initial state. */
         case APP_GEN_STATE_INIT:
         {
+            // Initialisation de l'I2C
+            I2C_InitMCP79411();
+            
             //reliser l'affichage démarage
             lcd_init();
             lcd_bl_on();
@@ -168,9 +171,6 @@ void APP_GEN_Tasks ( void )
             
             // Init SPI DAC
             SPI_InitLTC2604();  
-            
-            // Initialisation de l'I2C
-            I2C_InitMCP79411();
 
             // Initialisation du generateur
             GENSIG_Initialize(&LocalParamGen);

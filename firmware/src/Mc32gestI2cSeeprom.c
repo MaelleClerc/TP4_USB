@@ -59,6 +59,7 @@ void I2C_WriteSEEPROM(S_ParamGen *SrcData)
     {
         if (i % 7 == 0)
         {
+            i2c_stop();
             i2c_start();
             i2c_write(MCP79411_EEPROM_W); 
         }
@@ -87,6 +88,7 @@ void I2C_ReadSEEPROM(S_ParamGen *DstData)
     {
         if (i % 7 == 0)
         {
+            i2c_stop();
             i2c_start();
             i2c_write(MCP79411_EEPROM_R); 
         }
