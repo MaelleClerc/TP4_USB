@@ -79,7 +79,7 @@ void I2C_ReadSEEPROM(S_ParamGen *DstData)
     uint8_t *pt_charStruct; 
    // Lecture
 
-    i2c_start();
+    //i2c_start();
     //pointeur sur la structure // 
     pt_charStruct = (uint8_t *)DstData;
     

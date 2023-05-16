@@ -31,7 +31,7 @@ int32_t tb_Amplitude[MAX_ECH];
 void  GENSIG_Initialize(S_ParamGen *pParam)
 {           
     //Recuperation des datas sauvegardées au demarrage precedent
-    //I2C_ReadSEEPROM(pParam);
+    I2C_ReadSEEPROM(pParam);
     
     //Test si match de la valeur Magic
     if (pParam->Magic == MAGIC)

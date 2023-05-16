@@ -170,8 +170,8 @@ void APP_GEN_Tasks ( void )
             printf_lcd("Maelle Clerc");
             
             // Init SPI DAC
-            SPI_InitLTC2604();  
-
+            SPI_InitLTC2604(); 
+            
             // Initialisation du generateur
             GENSIG_Initialize(&LocalParamGen);
             //realiser le signal
