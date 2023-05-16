@@ -229,9 +229,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     Timer_LCD = 0;
                     //enregistrer les datas dans la flash
                     pParam->Magic = MAGIC;
-                    I2C_WriteSEEPROM(pParam);
-                    MAJ_LCD_Menu = 1;
-                    
+                    I2C_WriteSEEPROM(pParam);                 
                 }
             }
 
@@ -247,7 +245,6 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     //remettre à 0 les timer
                     S9.PressDuration = 0;
                     Timer_LCD = 0;
-                    MAJ_LCD_Menu = 1;
                 }           
             }               
         }                      
@@ -259,7 +256,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
             
         }
     }
-    OLD_Local = Local;
+   OLD_Local = Local;
 }    
 
 
