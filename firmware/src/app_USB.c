@@ -553,11 +553,11 @@ void APP_Tasks (void )
                 /* Else echo each received character by adding 1 */
                 for(i=0; i<appData.numBytesRead; i++) //à voir s'il faudra faire +1
                 {
-                    //if((appData.readBuffer[i] != 0x0A) && (appData.readBuffer[i] != 0x0D))
-                   // {
+                    if((appData.readBuffer[i] != 0x0A) && (appData.readBuffer[i] != 0x0D))
+                   {
                         SendMessage((int8_t *)appData.readBuffer,(int8_t *)appData.readBuffer, Flag_Save() );
                         //appData.readBuffer[i] = appData.readBuffer[i];
-                   // }
+                   }
                 }
                 
                 

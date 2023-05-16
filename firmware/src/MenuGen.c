@@ -149,10 +149,12 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                  
                     //clear LCD
                     Clear_LCD();
-                    //lire et décodé        
+                    //mettre � jour l'affichage      
                     Menu_interface(pParam);
                    //ajouter les # aux début des 24 ligne
                     Pt_AffichageRemote(); 
+                    //mettre � jour la forme des signaux
+                    GENSIG_UpdateSignal(pParam);
                     //flag menu mis à jour
                     New_LCD_aftersave = 0;
                 }
@@ -166,10 +168,12 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
             {
                 //clear le LCD
                 Clear_LCD();
-                //lire et décodé        
+                //mettre � jour l'affichage           
                 Menu_interface(pParam);
                 //ajouter les # aux début des 24 ligne
                 Pt_AffichageRemote();
+                //mettre � jour la forme des signaux
+                GENSIG_UpdateSignal(pParam);
             }
             else 
             {
@@ -190,7 +194,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
             if (S9.PressDuration == 0)
             {
                 //mettre à jour l'affichage si le menu de sauvegarde a été activé
-                if (MAJ_LCD_Menu == 0)
+                if ((MAJ_LCD_Menu == 0)&&(Local == OLD_Local))
                 {
                     /*gestion de l'affichage avec le PEG12*/
                     Menu_GESTION_PEG12(pParam);    

@@ -34,12 +34,13 @@ void GetMessage(char *USBReadBuffer, S_ParamGen *pParam)
     int16_t Frequence_recue = 0;
     int16_t Amplitude_recue = 0;
     int16_t Offset_recu = 0;
-    bool SaveTodo = false;
+    bool SaveTodo;
     static bool SaveTodo_Old = false;
+
 //controler que le premier caratere est un "!"
    if (USBReadBuffer[0] == '!')
    {
-        // Traduction de la forme du signal
+              // Traduction de la forme du signal
         switch (USBReadBuffer[3])
         {
             case 'T':
@@ -78,8 +79,9 @@ void GetMessage(char *USBReadBuffer, S_ParamGen *pParam)
         // Traduction de l'offset
         Offset_recu = atoi(&USBReadBuffer[19]);
         
+        SaveTodo = 1;
        //traduir la save
-        SaveTodo = atoi(&USBReadBuffer[26]);
+        //SaveTodo = atoi(&USBReadBuffer[26]);
         //tester si les caratère on ete modifier durant les deux envoie
         if((Offset_recu == pParam->Offset) && (Amplitude_recue == pParam->Amplitude) && (Frequence_recue == pParam->Frequence) && (Forme_recue == pParam->Forme )&& (SaveTodo_Old == SaveTodo))
         {
@@ -98,6 +100,7 @@ void GetMessage(char *USBReadBuffer, S_ParamGen *pParam)
         pParam->Amplitude = Amplitude_recue;
         pParam->Offset = Offset_recu;
         SaveTodo_Old = SaveTodo;
+        
         
         if (SaveTodo != 0)
         {

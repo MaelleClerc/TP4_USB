@@ -216,6 +216,7 @@ void APP_GEN_Tasks ( void )
                 GetMessage(appData.readBuffer, &RemoteParamGen);
                 //executer menu execute
                 MENU_Execute(&RemoteParamGen, Local);
+                //SendMessage((int8_t *)appData.readBuffer,(int8_t *)appData.readBuffer, Flag_Save() );
             }
             else
             {   
