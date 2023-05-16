@@ -130,7 +130,7 @@ else
 
 
 
-void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer , bool Saved)
+void SendMessage(char *USBReadBuffer,char *USBSendBuffer , bool Saved)
 {
     //variable static local
     static int i;

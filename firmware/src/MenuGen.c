@@ -231,7 +231,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     Timer_LCD = 0;
                     //enregistrer les datas dans la flash
                     pParam->Magic = MAGIC;
-                    I2C_WriteSEEPROM(pParam);                 
+                    //I2C_WriteSEEPROM(pParam);                 
                 }
             }
 

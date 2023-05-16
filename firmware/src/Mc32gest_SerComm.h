@@ -20,7 +20,7 @@
 // Prototypes des fonctions 
 /*--------------------------------------------------------*/
 
-void SendMessage(int8_t *USBReadBuffer,int8_t *USBSendBuffer, bool Saved);
+void SendMessage(char *USBReadBuffer,char *USBSendBuffer, bool Saved);
 void GetMessage(char *USBReadBuffer, S_ParamGen *pParam );
 
 #endif

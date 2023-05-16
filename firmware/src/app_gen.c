@@ -213,7 +213,7 @@ void APP_GEN_Tasks ( void )
                 //mettre le paramètre à 0
                 Local = 0;       
                 //obtenir la chaine de caratere
-                GetMessage(appData.readBuffer, &RemoteParamGen);
+                GetMessage(appData.readBuffer, &RemoteParamGen);    
                 //executer menu execute
                 MENU_Execute(&RemoteParamGen, Local);
                 //SendMessage((int8_t *)appData.readBuffer,(int8_t *)appData.readBuffer, Flag_Save() );
