@@ -19,7 +19,7 @@
 #include "bsp.h"
 #include "Mc32gestI2cSeeprom.h"
 
-#define TIMER_LCD_SAUVGARDE 2000
+#define TIMER_LCD_SAUVGARDE 200
 //#define TIMER_S9_SAVE 199
 #define AFK_TIME 499 //DurÃ©e d'inactivitÃ© avant d'Ã©taindre le rÃ©tro-Ã©clairage
 #define TIMER_S9_SAVE 199
@@ -42,6 +42,7 @@ uint8_t MAJ_LCD_Menu = 0;
 //déclaration constate tableau
 const char tb_MenuFormes [4] [21] = { "Sinus", "Triangle", "DentDeScie", "Carre" };
 
+
  
 // Initialisation du menu et des parametres
 void MENU_Initialize(S_ParamGen *pParam)
@@ -53,6 +54,7 @@ void MENU_Initialize(S_ParamGen *pParam)
     Val.Amplitude = pParam->Amplitude;
     Val.Frequence = pParam->Frequence;
    
+    S9.PressDuration = 0;
     //clear LCD
     Clear_LCD();
     //menu principale
@@ -180,6 +182,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
     //----------------MODE LOCAL-------------------------//
     else
     {
+        
         //ENREGSTRER DANS LA EEPROM//
         if (S9.OK == 0)
         {
@@ -223,6 +226,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     //enregistrer les datas dans la flash
                     pParam->Magic = MAGIC;
                     I2C_WriteSEEPROM(pParam);
+                    MAJ_LCD_Menu = 1;
                     
                 }
             }
@@ -239,6 +243,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     //remettre à 0 les timer
                     S9.PressDuration = 0;
                     Timer_LCD = 0;
+                    MAJ_LCD_Menu = 1;
                 }           
             }               
         }                      
