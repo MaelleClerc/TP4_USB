@@ -123,12 +123,12 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 Menu_Save();
                 //flag menu save afficher
                 New_LCD_aftersave = 1;
-                //incrÃ©mentÃ© le compteur
+                //incrémenté le compteur
                 Compt_SAVE++;
             }
             else
             {
-                //incrÃ©mentÃ© le compteur
+                //incrémenté le compteur
                 Compt_SAVE++;
             }
             
@@ -137,7 +137,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 //si les vleur son changer
                 if(Flag_RefreshLCDRemote())
                 {
-                     //mettre Ã  0 le comteur
+                     //mettre à 0 le comteur
                     Compt_SAVE = 0;
                 }                
                 else if (New_LCD_aftersave ==1)
@@ -145,17 +145,15 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     //enregistrer les datas dans la EEPROM
                     //NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes//enregistrer les datas dans la flash
                     pParam->Magic = MAGIC;
-                    I2C_WriteSEEPROM(pParam);
+                    //I2C_WriteSEEPROM(pParam);
                  
                     //clear LCD
                     Clear_LCD();
-                    //mettre à jour l'affichage      
+                    //lire et décodé        
                     Menu_interface(pParam);
-                   //ajouter les # aux dÃ©but des 24 ligne
+                   //ajouter les # aux début des 24 ligne
                     Pt_AffichageRemote(); 
-                    //mettre à jour la forme des signaux
-                    GENSIG_UpdateSignal(pParam);
-                    //flag menu mis Ã  jour
+                    //flag menu mis à jour
                     New_LCD_aftersave = 0;
                 }
             }  
@@ -168,12 +166,10 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
             {
                 //clear le LCD
                 Clear_LCD();
-                //mettre à jour l'affichage           
+                //lire et décodé        
                 Menu_interface(pParam);
-                //ajouter les # aux dÃ©but des 24 ligne
+                //ajouter les # aux début des 24 ligne
                 Pt_AffichageRemote();
-                //mettre à jour la forme des signaux
-                GENSIG_UpdateSignal(pParam);
             }
             else 
             {
@@ -190,11 +186,11 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
         //ENREGSTRER DANS LA EEPROM//
         if (S9.OK == 0)
         {
-         //si la durree de pression est Ã©gale Ã  0 == pas de save
+         //si la durree de pression est égale à 0 == pas de save
             if (S9.PressDuration == 0)
             {
-                //mettre Ã  jour l'affichage si le menu de sauvegarde a Ã©tÃ© activÃ©
-                if ((MAJ_LCD_Menu == 0)&&(Local == OLD_Local))
+                //mettre à jour l'affichage si le menu de sauvegarde a été activé
+                if (MAJ_LCD_Menu == 0)
                 {
                     /*gestion de l'affichage avec le PEG12*/
                     Menu_GESTION_PEG12(pParam);    
@@ -207,12 +203,12 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     Menu_interface(pParam);
                     /*gestion de l'affichage avec le PEG12*/
                     Menu_GESTION_PEG12(pParam);  
-                    //menu mis Ã  jour
+                    //menu mis à jour
                     MAJ_LCD_Menu = 0;
 
                 }
             }
-            //si le maintiens du bouton S9 >= Ã Â  2 sec
+            //si le maintiens du bouton S9 >= à  2 sec
             else if ((S9.SAVE == 1)&&(S9.PressDuration > 0))
             {          
                 /*Afficher sauvgade OK*/
@@ -223,7 +219,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 Timer_LCD ++;
                 if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
                 {
-                    //remettre Ã  0 les timer
+                    //remettre à 0 les timer
                     S9.SAVE = 0;
                     S9.PressDuration = 0;
                     Timer_LCD = 0;
@@ -244,7 +240,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                 Timer_LCD ++;
                 if (Timer_LCD >= TIMER_LCD_SAUVGARDE)
                 {
-                    //remettre Ã  0 les timer
+                    //remettre à 0 les timer
                     S9.PressDuration = 0;
                     Timer_LCD = 0;
                     MAJ_LCD_Menu = 1;
@@ -260,7 +256,7 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
         }
     }
     OLD_Local = Local;
-}    
+}        
 
 
 /*Design menu de sauvgade remote*/
