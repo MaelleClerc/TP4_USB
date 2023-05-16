@@ -145,16 +145,17 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
                     //enregistrer les datas dans la EEPROM
                     //NVM_WriteBlock((uint32_t*)pParam, 14); //Taille datas = taille structutre = 14 bytes//enregistrer les datas dans la flash
                     pParam->Magic = MAGIC;
-                    I2C_WriteSEEPROM(pParam);
+                    //I2C_WriteSEEPROM(pParam);
                  
                     //clear LCD
                     Clear_LCD();
+                    //mettre ‡ jour la forme des signaux
+                    GENSIG_UpdateSignal(pParam);
                     //mettre ‡ jour l'affichage      
                     Menu_interface(pParam);
                    //ajouter les # aux d√©but des 24 ligne
                     Pt_AffichageRemote(); 
-                    //mettre ‡ jour la forme des signaux
-                    GENSIG_UpdateSignal(pParam);
+                    
                     //flag menu mis √† jour
                     New_LCD_aftersave = 0;
                 }
@@ -166,14 +167,15 @@ void MENU_Execute(S_ParamGen *pParam, bool Local)
         {                  
             if ((Local != OLD_Local) || (Flag_RefreshLCDRemote()))
             {
+                //mettre ‡ jour la forme des signaux
+                GENSIG_UpdateSignal(pParam);
                 //clear le LCD
                 Clear_LCD();
                 //mettre ‡ jour l'affichage           
                 Menu_interface(pParam);
                 //ajouter les # aux d√©but des 24 ligne
                 Pt_AffichageRemote();
-                //mettre ‡ jour la forme des signaux
-                GENSIG_UpdateSignal(pParam);
+                
             }
             else 
             {
