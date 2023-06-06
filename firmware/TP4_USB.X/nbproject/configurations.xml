@@ -386,9 +386,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="app" displayName="app" projectFiles="true">
-        <logicalFolder name="system_config"
-                       displayName="system_config"
-                       projectFiles="true">
+        <logicalFolder name="f1" displayName="system_config" projectFiles="true">
           <logicalFolder name="f1"
                          displayName="pic32mx_usb_sk2_int_dyn"
                          projectFiles="true">

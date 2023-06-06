@@ -107,6 +107,14 @@ void __ISR(_TIMER_3_VECTOR, ipl7AUTO) IntHandlerDrvTmrInstance1(void)
     GENSIG_Execute();
     PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_3);
 }
+void __ISR(_TIMER_2_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance2(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_2);
+}
+void __ISR(_TIMER_4_VECTOR, ipl1AUTO) IntHandlerDrvTmrInstance3(void)
+{
+    PLIB_INT_SourceFlagClear(INT_ID_0,INT_SOURCE_TIMER_4);
+}
  void __ISR(_USB_1_VECTOR, ipl4AUTO) _IntHandlerUSBInstance0(void)
 {
     DRV_USBFS_Tasks_ISR(sysObj.drvUSBObject);

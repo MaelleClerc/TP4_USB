@@ -274,7 +274,7 @@
       <Template dnOrder="1">
         <Name dnOrder="0">system_config.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/pic32mx_usb_sk2_int_dyn</Path>
-        <Checksum dnOrder="2">E1643E6AB257BF21943ADAA2674DFE63</Checksum>
+        <Checksum dnOrder="2">1BFC0F2F306B9DA83661F1E837D7B5F2</Checksum>
         <ProjectFileChecksum dnOrder="3">26E72F6E765C91248AACC2F1EF591CAD</ProjectFileChecksum>
       </Template>
       <Template dnOrder="2">
@@ -307,18 +307,18 @@
       <Template dnOrder="8">
         <Name dnOrder="0">system_init.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/pic32mx_usb_sk2_int_dyn</Path>
-        <Checksum dnOrder="2">DEB1DEE9E8499D122B897FAC4B997FF7</Checksum>
+        <Checksum dnOrder="2">A50CD42236CDACEEFBE3C3C7F7A8EA45</Checksum>
         <ProjectFileChecksum dnOrder="3">2C9B41AC47D4EFC07146B413FA6454B5</ProjectFileChecksum>
       </Template>
       <Template dnOrder="9">
         <Name dnOrder="0">drv_tmr_static.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">0242F31D547C0FE52C8F41E9A3DADD80</Checksum>
+        <Checksum dnOrder="2">E8D1239DC69C19E16938A71ABDB69BBB</Checksum>
       </Template>
       <Template dnOrder="10">
         <Name dnOrder="0">system_interrupt.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/pic32mx_usb_sk2_int_dyn</Path>
-        <Checksum dnOrder="2">F6D8BAF7163D9CBB6BEA2395413BB300</Checksum>
+        <Checksum dnOrder="2">C54B47B6BA29EBBBD9FF3FD7989246C6</Checksum>
         <ProjectFileChecksum dnOrder="3">FBAF2FD1EA55E8B223AC4D33F8C6417B</ProjectFileChecksum>
       </Template>
       <Template dnOrder="11">
@@ -329,7 +329,7 @@
       <Template dnOrder="12">
         <Name dnOrder="0">drv_tmr_mapping.c</Name>
         <Path dnOrder="1">Source&amp;#160;Files/app/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr/src</Path>
-        <Checksum dnOrder="2">DBE26CBCA22A445A54836CB11F19BC62</Checksum>
+        <Checksum dnOrder="2">65C24AB9CFA0216FAE6039B27780D5B6</Checksum>
       </Template>
       <Template dnOrder="13">
         <Name dnOrder="0">sys_devcon.c</Name>
@@ -339,12 +339,12 @@
       <Template dnOrder="14">
         <Name dnOrder="0">system_definitions.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/pic32mx_usb_sk2_int_dyn</Path>
-        <Checksum dnOrder="2">D3BCA5D8ACE15552565A449E886D0222</Checksum>
+        <Checksum dnOrder="2">446E920CF8A0FCF38F7FD942170AA656</Checksum>
       </Template>
       <Template dnOrder="15">
         <Name dnOrder="0">drv_tmr_static.h</Name>
         <Path dnOrder="1">Header&amp;#160;Files/app/system_config/pic32mx_usb_sk2_int_dyn/framework/driver/tmr</Path>
-        <Checksum dnOrder="2">1C7228F02C03792BAB187C996AEBCD0E</Checksum>
+        <Checksum dnOrder="2">8C64664AEDE504C4C1A03C4B9C0CC418</Checksum>
       </Template>
       <Template dnOrder="16">
         <Name dnOrder="0">sys_clk_pic32mx.c</Name>

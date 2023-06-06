@@ -68,8 +68,9 @@ void FlagRefreshLCD_Clear(void);
 //retourner la valeur du flag remote LCD
 bool  Flag_RefreshLCDRemote(void);
 //clear la valeur de du flag remote LCD
-void FlagRefreshLCDRemote_Clear(void);
-
+void FlagRefreshLCDRemote_Clear(bool Val);
+//set la valeur de du flag remote LCD
+ void FlagRemote_Set(void);
 //void MAJ_Valeur (S_ParamGen *pParam);
 
 
